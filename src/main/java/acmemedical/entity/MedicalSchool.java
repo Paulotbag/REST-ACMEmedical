@@ -24,18 +24,15 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the medical_school database table.
  */
-// MS01 - Add the missing annotations.
 @Entity
 @Table(name = "medical_school")
 
-// MS02 - Specify inheritance type.
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 
 //TODO MS03 - Do we need a mapped super class?  If so, which one?
 //In this code, MedicalSchool does not need to be a @MappedSuperclass 
 //because it is an entity that should have its own table representation
 
-// MS04 - Add JSON annotations to indicate different sub-classes of MedicalSchool.
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = PublicSchool.class, name = "public"),
@@ -44,15 +41,12 @@ import jakarta.persistence.Table;
 public abstract class MedicalSchool extends PojoBase implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	// MS05 - Add the missing annotations.
     @Column(name = "name", nullable = false, unique = true)
 	private String name;
 
-    // MS06 - Add the 1:M annotation. Specify cascade and fetch types.
     @OneToMany(mappedBy = "medicalSchool", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<MedicalTraining> medicalTrainings = new HashSet<>();
 
-    // MS07 - Add missing annotation.
     @Column(name = "is_public", nullable = false)
 	private boolean isPublic;
 
@@ -65,7 +59,6 @@ public abstract class MedicalSchool extends PojoBase implements Serializable {
         this.isPublic = isPublic;
     }
 
-	// TODO MS08 - Is an annotation needed here?
     // No specific annotation needed for this getter.
 	public Set<MedicalTraining> getMedicalTrainings() {
 		return medicalTrainings;
