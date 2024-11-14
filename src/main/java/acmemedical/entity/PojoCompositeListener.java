@@ -13,18 +13,20 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 @SuppressWarnings("unused")
+public class PojoCompositeListener { 
 
-public class PojoCompositeListener {
+    // PCL01 - Use @PrePersist to specify actions before the entity is INSERT'd into the database.
+    @PrePersist
+    public void setCreatedOnDate(PojoBaseCompositeKey<?> pojoBaseComposite) {
+        LocalDateTime now = LocalDateTime.now();
+        // PCL02 - Set the 'created' field before the entity is inserted into the database.
+        pojoBaseComposite.setCreated(now);
+    }
 
-	// TODO PCL01 - What annotation is used when we want to do something just before object is INSERT'd into database?
-	public void setCreatedOnDate(PojoBaseCompositeKey<?> pojoBaseComposite) {
-		LocalDateTime now = LocalDateTime.now();
-		// TODO PCL02 - What member field(s) do we wish to alter just before object is INSERT'd in the database?
-	}
-
-	// TODO PCL03 - What annotation is used when we want to do something just before object is UPDATE'd into database?
-	public void setUpdatedDate(PojoBaseCompositeKey<?> pojoBaseComposite) {
-		// TODO PCL04 - What member field(s) do we wish to alter just before object is UPDATE'd in the database?
-	}
-
+    // PCL03 - Use @PreUpdate to specify actions before the entity is UPDATE'd into the database.
+    @PreUpdate
+    public void setUpdatedDate(PojoBaseCompositeKey<?> pojoBaseComposite) {
+        // PCL04 - Set the 'updated' field before the entity is updated in the database.
+        pojoBaseComposite.setUpdated(LocalDateTime.now());
+    }
 }
