@@ -66,7 +66,7 @@ public abstract class PojoBaseCompositeKey<ID extends Serializable> implements S
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
+        final int prime = 31; 
         int result = super.hashCode();
         // Only include member variables that really contribute to an object's identity
         // i.e. if variables like version/updated/name/etc. change throughout an object's lifecycle,

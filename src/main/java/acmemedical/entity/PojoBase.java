@@ -4,7 +4,7 @@
  * @author Teddy Yap
  * @author Shariar (Shawn) Emami
  * 
- */
+ */ 
 package acmemedical.entity;
 
 import java.io.Serializable;

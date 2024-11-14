@@ -13,7 +13,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 @SuppressWarnings("unused")
-public class PojoCompositeListener {
+public class PojoCompositeListener { 
 
     // PCL01 - Use @PrePersist to specify actions before the entity is INSERT'd into the database.
     @PrePersist

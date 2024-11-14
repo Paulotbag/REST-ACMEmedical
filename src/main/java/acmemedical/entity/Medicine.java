@@ -138,7 +138,7 @@ public class Medicine extends PojoBase implements Serializable {
 	public int hashCode() {
 		return Objects.hash(getId(), drugName, manufacturerName);
 	}
-
+ 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
