@@ -7,6 +7,8 @@
  */
 package acmemedical.entity;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.HashSet;
@@ -19,50 +21,89 @@ import java.util.Set;
  * User class used for (JSR-375) Jakarta EE Security authorization/authentication
  */
 
-//TODO SU01 - Make this into JPA entity and add all the necessary annotations inside the class.
+@Entity(name = "SecurityUser")
+@Table(name = "SECURITY_USER")
+@NamedQuery(
+        name = "SecurityUser.userByName",
+        query = "SELECT u FROM SecurityUser u WHERE u.username = :param1"
+)
 public class SecurityUser implements Serializable, Principal {
     /** Explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
-    //TODO SU02 - Add annotations.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
-    
-    //TODO SU03 - Add annotations.
+
+    @Column(name = "username")
     protected String username;
-    
-    //TODO SU04 - Add annotations.
+
+    @Column(name = "password_hash")
     protected String pwHash;
-    
-    //TODO SU05 - Add annotations.
+
+    @OneToOne
+    @JoinColumn(name = "physician_id", referencedColumnName="id")  // This is the column name of the Foreign Key
     protected Physician physician;
-    
-    //TODO SU06 - Add annotations.
+
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_has_role",   // Name of the intermediate table
+            joinColumns = @JoinColumn(name = "user_id"),  // Foreign key for the user_id (the one that comes from SecurityUser)
+            inverseJoinColumns = @JoinColumn(name = "role_id") // Foreign key for the role_id (the one that comes from SecurityRole table)
+    )
     protected Set<SecurityRole> roles = new HashSet<SecurityRole>();
+
 
     public SecurityUser() {
         super();
     }
 
+    /**
+     *
+     * @return int
+     */
     public int getId() {
         return id;
     }
-    
+
+    /**
+     *
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     *
+     * @return String
+     */
     public String getUsername() {
         return username;
     }
-    
+
+    /**
+     *
+     * @param username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     *
+     * @return String
+     */
     public String getPwHash() {
         return pwHash;
     }
-    
+
+    /**
+     *
+     * @param pwHash
+     */
     public void setPwHash(String pwHash) {
         this.pwHash = pwHash;
     }
@@ -71,25 +112,45 @@ public class SecurityUser implements Serializable, Principal {
     public Set<SecurityRole> getRoles() {
         return roles;
     }
-    
+
+    /**
+     *
+     * @param roles
+     */
     public void setRoles(Set<SecurityRole> roles) {
         this.roles = roles;
     }
 
+    /**
+     *
+     * @return Physician
+     */
     public Physician getPhysician() {
         return physician;
     }
-    
+
+    /**
+     *
+     * @param physician
+     */
     public void setPhysician(Physician physician) {
         this.physician = physician;
     }
 
     // Principal
+    /**
+     *
+     * @return String
+     */
     @Override
     public String getName() {
         return getUsername();
     }
 
+    /**
+     *
+     * @return int
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -100,6 +161,12 @@ public class SecurityUser implements Serializable, Principal {
         return prime * result + Objects.hash(getId());
     }
 
+    /**
+     *
+     * @param obj {@code Principal} to compare with.
+     *
+     * @return boolean
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -116,6 +183,10 @@ public class SecurityUser implements Serializable, Principal {
         return false;
     }
 
+    /**
+     *
+     * @return String
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

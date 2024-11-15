@@ -42,6 +42,10 @@ public class Physician extends PojoBase implements Serializable {
 	@OneToMany(mappedBy = "physician", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Prescription> prescriptions = new HashSet<>();
 
+//	//  I don't think we need this. but... This is reverse relationship
+//	@OneToOne(mappedBy = "physician") // mappedBy indicates that this is the inverse side of the relationship with Security User.
+//	private SecurityUser securityUser;
+
 	/**
 	 *
 	 * @return firstName
