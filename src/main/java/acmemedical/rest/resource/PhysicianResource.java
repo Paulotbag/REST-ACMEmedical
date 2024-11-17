@@ -4,6 +4,7 @@
  * @author Teddy Yap
  * @author Shariar (Shawn) Emami
  * @author (original) Mike Norman
+ * Implemented by: Paulo Granjeiro and Azadeh
  * 
  */
 package acmemedical.rest.resource;
@@ -55,6 +56,10 @@ public class PhysicianResource {
     @Inject
     protected SecurityContext sc;
 
+    /**
+     *
+     * @return Response
+     */
     @GET
     //Only a user with the SecurityRole ‘ADMIN_ROLE’ can get the list of all physicians.
     @RolesAllowed({ADMIN_ROLE})
@@ -65,6 +70,12 @@ public class PhysicianResource {
         return response;
     }
 
+    /**
+     *
+     * @param id
+     * @return Response
+     */
+    //Access Physician by ID Using SecurityUser's Associated Physician
     @GET
     //A user with either the role ‘ADMIN_ROLE’ or ‘USER_ROLE’ can get a specific physician.
     @RolesAllowed({ADMIN_ROLE, USER_ROLE})
@@ -74,10 +85,16 @@ public class PhysicianResource {
         Response response = null;
         Physician physician = null;
 
+        //SecurityContext - Check roles and access Principal of current user
+        //Admin can access any physician by ID.
         if (sc.isCallerInRole(ADMIN_ROLE)) {
         	physician = service.getPhysicianById(id);
             response = Response.status(physician == null ? Status.NOT_FOUND : Status.OK).entity(physician).build();
+
+            //The role User can only access the physician associated with the SecurityUser
+            //Unwrapping SecurityUser
         } else if (sc.isCallerInRole(USER_ROLE)) {
+            //These 2 lines bellow extracts the SecurityUser instance associated with the currently authenticated principal.
             WrappingCallerPrincipal wCallerPrincipal = (WrappingCallerPrincipal) sc.getCallerPrincipal();
             SecurityUser sUser = (SecurityUser) wCallerPrincipal.getWrapped();
             physician = sUser.getPhysician();
@@ -93,6 +110,11 @@ public class PhysicianResource {
         return response;
     }
 
+    /**
+     *
+     * @param newPhysician
+     * @return Response
+     */
     @POST
     //Only a user with the SecurityRole ‘ADMIN_ROLE’ can add a new physician.
     @RolesAllowed({ADMIN_ROLE})
@@ -105,6 +127,13 @@ public class PhysicianResource {
         return response;
     }
 
+    /**
+     *
+     * @param physicianId
+     * @param patientId
+     * @param newMedicine
+     * @return Response
+     */
     @PUT
     //Only an ‘ADMIN_ROLE’ user can associate a Medicine and/or Patient to a Physician.
     @RolesAllowed({ADMIN_ROLE})
