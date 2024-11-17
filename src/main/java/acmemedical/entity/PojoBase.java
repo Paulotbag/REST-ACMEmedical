@@ -7,16 +7,17 @@
  */ 
 package acmemedical.entity;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.*;
 
 /**
  * Abstract class that is base of (class) hierarchy for all @Entity classes
  */
 @MappedSuperclass  // PB01 - Defines this class as the superclass of all entities.
-@EntityListeners(PojoBaseListener.class)  // PB03 - Registers listener class for entity lifecycle events.
+@EntityListeners(PojoCompositeListener.class)  // PB03 - Registers listener class for entity lifecycle events.
 @Access(AccessType.FIELD)  // PB02 - Instructs JPA to place all annotations on fields.
 public abstract class PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -24,6 +24,7 @@ import jakarta.persistence.*;
 @Table(name = "MEDICAL_TRAINING")
 public class MedicalTraining extends PojoBase implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static final String FIND_BY_ID = null;
 
 
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)

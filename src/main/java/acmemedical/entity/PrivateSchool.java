@@ -2,6 +2,7 @@
  * File:  PrivateSchool.java Course Materials CST 8277
  *
  * @author Teddy Yap
+ * @implemented by Azadeh Sadeghtehrani
  * 
  */
 package acmemedical.entity;

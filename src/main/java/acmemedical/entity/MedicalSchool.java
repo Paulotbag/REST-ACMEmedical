@@ -2,6 +2,7 @@
  * File:  MedicalSchool.java Course Materials CST 8277
  *
  * @author Teddy Yap
+ * @implemented by Azadeh Sadeghtehrani
  * 
  */
 package acmemedical.entity;
@@ -21,12 +22,12 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+
 /**
  * The persistent class for the medical_school database table.
  */
 @Entity
 @Table(name = "medical_school")
-
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 
 //TODO MS03 - Do we need a mapped super class?  If so, which one?
@@ -37,8 +38,13 @@ import jakarta.persistence.Table;
 @JsonSubTypes({
     @JsonSubTypes.Type(value = PublicSchool.class, name = "public"),
     @JsonSubTypes.Type(value = PrivateSchool.class, name = "private")
+       
 })
 public abstract class MedicalSchool extends PojoBase implements Serializable {
+	
+	public static final String IS_DUPLICATE_QUERY_NAME = null;
+	public static final String SPECIFIC_MEDICAL_SCHOOL_QUERY_NAME = null;
+	public static final String ALL_MEDICAL_SCHOOLS_QUERY_NAME = null;
 	private static final long serialVersionUID = 1L;
 	
     @Column(name = "name", nullable = false, unique = true)
