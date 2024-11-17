@@ -3,6 +3,7 @@
  * 
  * @author Teddy Yap
  * @author Mike Norman
+ * Implemented by: Paulo Granjeiro
  *
  */
 package acmemedical.security;
@@ -38,6 +39,11 @@ public class CustomIdentityStore implements IdentityStore {
     @Inject
     protected Pbkdf2PasswordHash pbAndjPasswordHash;
 
+    /**
+     *
+     * @param credential The credential to validate.
+     * @return CredentialValidationResult
+     */
     @Override
     public CredentialValidationResult validate(Credential credential) {
 
@@ -89,6 +95,11 @@ public class CustomIdentityStore implements IdentityStore {
         return result;
     }
 
+    /**
+     *
+     * @param roles
+     * @return Set<String>
+     */
     protected Set<String> getRolesNamesForSecurityRoles(Set<SecurityRole> roles) {
         Set<String> roleNames = emptySet();
         if (!roles.isEmpty()) {

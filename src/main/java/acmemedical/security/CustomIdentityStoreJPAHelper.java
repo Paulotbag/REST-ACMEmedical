@@ -3,6 +3,7 @@
  * 
  * @author Teddy Yap
  * @author Mike Norman
+ * Implemented by: Paulo Granjeiro
  * 
  */
 package acmemedical.security;
@@ -37,6 +38,11 @@ public class CustomIdentityStoreJPAHelper {
     @PersistenceContext(name = PU_NAME)
     protected EntityManager em;
 
+    /**
+     *
+     * @param username
+     * @return SecurityUser
+     */
     public SecurityUser findUserByName(String username) {
         LOG.debug("find a SecurityUser by name = {}", username);
         SecurityUser user = null;
@@ -64,6 +70,11 @@ public class CustomIdentityStoreJPAHelper {
         return user;
     }
 
+    /**
+     *
+     * @param username
+     * @return Set<String>
+     */
     public Set<String> findRoleNamesForUser(String username) {
         LOG.debug("find Roles For Username={}", username);
         Set<String> roleNames = emptySet();
@@ -74,12 +85,20 @@ public class CustomIdentityStoreJPAHelper {
         return roleNames;
     }
 
+    /**
+     *
+     * @param user
+     */
     @Transactional
     public void saveSecurityUser(SecurityUser user) {
         LOG.debug("adding new user={}", user);
         em.persist(user);
     }
 
+    /**
+     *
+     * @param role
+     */
     @Transactional
     public void saveSecurityRole(SecurityRole role) {
         LOG.debug("adding new role={}", role);
