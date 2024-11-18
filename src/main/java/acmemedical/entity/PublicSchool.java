@@ -3,6 +3,7 @@
  *
  * @author Teddy Yap
  * @author Shariar (Shawn) Emami
+ * @implemented by Azadeh Sadeghtehrani
  * 
  */
 package acmemedical.entity;
