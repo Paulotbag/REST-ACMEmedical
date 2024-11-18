@@ -1,10 +1,9 @@
-/********************************************************************************************************
- * File:  SecurityUser.java Course Materials CST 8277
- *
- * @author Teddy Yap
- *
- */
 package acmemedical.entity;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 import jakarta.persistence.*;
 
@@ -15,38 +14,39 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+// Annotate class as an entity
 @SuppressWarnings("unused")
-@Entity(name = "SecurityUser") // Defines this class as a JPA entity.
-@Table(name = "SECURITY_USER") // Maps this entity to the "SECURITY_USER" table in the database.
+@Entity(name = "SecurityUser")
+@Table(name = "SECURITY_USER")
 @NamedQuery(
         name = "SecurityUser.userByName",
         query = "SELECT u FROM SecurityUser u WHERE u.username = :param1"
 )
+@JsonSerialize(using = SecurityUser.SecurityUserSerializer.class) // Custom serializer
 public class SecurityUser implements Serializable, Principal {
-    /** Explicit set serialVersionUID */
     @Serial
-    private static final long serialVersionUID = 1L; // Removed @Serial for compatibility with Java 8–11.
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatically generates IDs.
-    @Column(name = "id") // Maps this field to the "id" column in the database.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     protected int id;
 
-    @Column(name = "username", nullable = false, unique = true) // Username must be unique and non-nullable.
+    @Column(name = "username", nullable = false, unique = true)
     protected String username;
 
-    @Column(name = "password_hash", nullable = false) // Password hash must be non-nullable.
+    @Column(name = "password_hash", nullable = false)
     protected String pwHash;
 
     @OneToOne
-    @JoinColumn(name = "physician_id", referencedColumnName = "id") // Maps to the "id" column in the Physician table.
+    @JoinColumn(name = "physician_id", referencedColumnName = "id")
     protected Physician physician;
 
     @ManyToMany
     @JoinTable(
-            name = "user_has_role",   // Name of the intermediate table.
-            joinColumns = @JoinColumn(name = "user_id"),  // Foreign key for "user_id" (SecurityUser).
-            inverseJoinColumns = @JoinColumn(name = "role_id") // Foreign key for "role_id" (SecurityRole).
+            name = "user_has_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     protected Set<SecurityRole> roles = new HashSet<>();
 
@@ -100,7 +100,6 @@ public class SecurityUser implements Serializable, Principal {
         this.physician = physician;
     }
 
-    // Implements Principal interface
     @Override
     public String getName() {
         return getUsername();
@@ -131,5 +130,30 @@ public class SecurityUser implements Serializable, Principal {
     @Override
     public String toString() {
         return "SecurityUser [id=" + id + ", username=" + username + "]";
+    }
+
+    /**
+     * Custom JSON Serializer for SecurityUser class.
+     */
+    public static class SecurityUserSerializer extends JsonSerializer<SecurityUser> {
+        @Override
+        public void serialize(SecurityUser user, JsonGenerator gen, SerializerProvider serializers) {
+            try {
+                gen.writeStartObject();
+                gen.writeNumberField("id", user.getId());
+                gen.writeStringField("username", user.getUsername());
+                if (user.getPhysician() != null) {
+                    gen.writeObjectField("physician", user.getPhysician());
+                }
+                gen.writeArrayFieldStart("roles");
+                for (SecurityRole role : user.getRoles()) {
+                    gen.writeString(role.getRoleName()); // Assuming SecurityRole has a getRoleName() method.
+                }
+                gen.writeEndArray();
+                gen.writeEndObject();
+            } catch (Exception e) {
+                throw new RuntimeException("Error serializing SecurityUser", e);
+            }
+        }
     }
 }
