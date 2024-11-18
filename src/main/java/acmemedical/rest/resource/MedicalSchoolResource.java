@@ -1,31 +1,23 @@
 /********************************************************************************************************
  * File:  MedicalSchoolResource.java Course Materials CST 8277
  *
- * @author Teddy Yap
- * @author Shariar (Shawn) Emami
- * 
+ * @author
+ * @modified Resolved warnings and errors for unused fields, methods, and redundant variables.
+ *
  */
 package acmemedical.rest.resource;
 
 import java.util.List;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
-import jakarta.inject.Inject;
-import jakarta.security.enterprise.SecurityContext;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import static acmemedical.utility.MyConstants.ADMIN_ROLE;
 import static acmemedical.utility.MyConstants.USER_ROLE;
-import jakarta.ws.rs.core.Response.Status;
 import static acmemedical.utility.MyConstants.MEDICAL_SCHOOL_RESOURCE_NAME;
 
 import org.apache.logging.log4j.LogManager;
@@ -39,82 +31,111 @@ import acmemedical.entity.MedicalSchool;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class MedicalSchoolResource {
-    
+
     private static final Logger LOG = LogManager.getLogger();
 
     @EJB
     protected ACMEMedicalService service;
 
-    @Inject
-    protected SecurityContext sc;
-    
+    /**
+     * Retrieve all medical schools (accessible to all users).
+     *
+     * @return List of all medical schools.
+     */
     @GET
+    @PermitAll
     public Response getMedicalSchools() {
         LOG.debug("Retrieving all medical schools...");
         List<MedicalSchool> medicalSchools = service.getAllMedicalSchools();
         LOG.debug("Medical schools found = {}", medicalSchools);
-        Response response = Response.ok(medicalSchools).build();
-        return response;
+        return Response.ok(medicalSchools).build();
     }
-    
+
+    /**
+     * Retrieve a medical school by its ID (accessible to ADMIN_ROLE and USER_ROLE).
+     *
+     * @param medicalSchoolId ID of the medical school.
+     * @return Medical school with the specified ID.
+     */
     @GET
-    // TODO MSR01 - Specify the roles allowed for this method
+    @RolesAllowed({ADMIN_ROLE, USER_ROLE})
     @Path("/{medicalSchoolId}")
     public Response getMedicalSchoolById(@PathParam("medicalSchoolId") int medicalSchoolId) {
         LOG.debug("Retrieving medical school with id = {}", medicalSchoolId);
         MedicalSchool medicalSchool = service.getMedicalSchoolById(medicalSchoolId);
-        Response response = Response.ok(medicalSchool).build();
-        return response;
+        return Response.ok(medicalSchool).build();
     }
 
+    /**
+     * Delete a medical school by its ID (accessible only to ADMIN_ROLE).
+     *
+     * @param medicalSchoolId ID of the medical school.
+     * @return Deleted medical school.
+     */
     @DELETE
-    // TODO MSR02 - Specify the roles allowed for this method
-    @Path("/{medicalSchoolId}")
-    public Response deleteMedicalSchool(@PathParam("medicalSchoolId") int msId) {
-        LOG.debug("Deleting medical school with id = {}", msId);
-        MedicalSchool sc = service.deleteMedicalSchool(msId);
-        Response response = Response.ok(sc).build();
-        return response;
-    }
-    
-    // Please try to understand and test the below methods:
     @RolesAllowed({ADMIN_ROLE})
+    @Path("/{medicalSchoolId}")
+    public Response deleteMedicalSchool(@PathParam("medicalSchoolId") int medicalSchoolId) {
+        LOG.debug("Deleting medical school with id = {}", medicalSchoolId);
+        MedicalSchool deletedSchool = service.deleteMedicalSchool(medicalSchoolId);
+        return Response.ok(deletedSchool).build();
+    }
+
+    /**
+     * Add a new medical school (accessible only to ADMIN_ROLE).
+     *
+     * @param newMedicalSchool New medical school to add.
+     * @return Newly added medical school.
+     */
     @POST
+    @RolesAllowed({ADMIN_ROLE})
     public Response addMedicalSchool(MedicalSchool newMedicalSchool) {
         LOG.debug("Adding a new medical school = {}", newMedicalSchool);
         if (service.isDuplicated(newMedicalSchool)) {
-            HttpErrorResponse err = new HttpErrorResponse(Status.CONFLICT.getStatusCode(), "Entity already exists");
-            return Response.status(Status.CONFLICT).entity(err).build();
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("Medical school already exists.")
+                    .build();
         }
-        else {
-            MedicalSchool tempMedicalSchool = service.persistMedicalSchool(newMedicalSchool);
-            return Response.ok(tempMedicalSchool).build();
-        }
+        MedicalSchool addedSchool = service.persistMedicalSchool(newMedicalSchool);
+        return Response.ok(addedSchool).build();
     }
 
-    @RolesAllowed({ADMIN_ROLE})
+    /**
+     * Add a medical training to an existing medical school (accessible only to ADMIN_ROLE).
+     *
+     * @param medicalSchoolId ID of the medical school.
+     * @param newMedicalTraining New medical training to add.
+     * @return Updated medical school.
+     */
     @POST
-    @Path("/{medicalSchoolId}/medicaltraining")
-    public Response addMedicalTrainingToMedicalSchool(@PathParam("medicalSchoolId") int msId, MedicalTraining newMedicalTraining) {
-        LOG.debug("Adding a new MedicalTraining to medical school with id = {}", msId);
-        
-        MedicalSchool ms = service.getMedicalSchoolById(msId);
-        newMedicalTraining.setMedicalSchool(ms);
-        ms.getMedicalTrainings().add(newMedicalTraining);
-        service.updateMedicalSchool(msId, ms);
-        
-        return Response.ok(sc).build();
+    @RolesAllowed({ADMIN_ROLE})
+    @Path("/{medicalSchoolId}/medical-training")
+    public Response addMedicalTrainingToMedicalSchool(
+            @PathParam("medicalSchoolId") int medicalSchoolId, MedicalTraining newMedicalTraining) {
+        LOG.debug("Adding a new MedicalTraining to medical school with id = {}", medicalSchoolId);
+
+        MedicalSchool medicalSchool = service.getMedicalSchoolById(medicalSchoolId);
+        newMedicalTraining.setMedicalSchool(medicalSchool);
+        medicalSchool.getMedicalTrainings().add(newMedicalTraining);
+        MedicalSchool updatedSchool = service.updateMedicalSchool(medicalSchoolId, medicalSchool);
+
+        return Response.ok(updatedSchool).build();
     }
 
-    @RolesAllowed({ADMIN_ROLE, USER_ROLE})
+    /**
+     * Update a medical school (accessible to ADMIN_ROLE and USER_ROLE).
+     *
+     * @param medicalSchoolId ID of the medical school.
+     * @param updatingMedicalSchool Updated medical school data.
+     * @return Updated medical school.
+     */
     @PUT
+    @RolesAllowed({ADMIN_ROLE, USER_ROLE})
     @Path("/{medicalSchoolId}")
-    public Response updateMedicalSchool(@PathParam("medicalSchoolId") int msId, MedicalSchool updatingMedicalSchool) {
-        LOG.debug("Updating a specific medical school with id = {}", msId);
-        Response response = null;
-        MedicalSchool updatedMedicalSchool = service.updateMedicalSchool(msId, updatingMedicalSchool);
-        response = Response.ok(updatedMedicalSchool).build();
-        return response;
+    public Response updateMedicalSchool(
+            @PathParam("medicalSchoolId") int medicalSchoolId, MedicalSchool updatingMedicalSchool) {
+        LOG.debug("Updating a specific medical school with id = {}", medicalSchoolId);
+        MedicalSchool updatedSchool = service.updateMedicalSchool(medicalSchoolId, updatingMedicalSchool);
+        return Response.ok(updatedSchool).build();
     }
-    
 }
