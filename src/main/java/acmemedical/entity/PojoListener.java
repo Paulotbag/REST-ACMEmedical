@@ -1,10 +1,3 @@
-/********************************************************************************************************
- * File:  PojoListener.java Course Materials CST 8277
- *
- * @author Teddy Yap
- * @author Shariar (Shawn) Emami
- * 
- */
 package acmemedical.entity;
 
 import java.time.LocalDateTime;
@@ -13,18 +6,29 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 @SuppressWarnings("unused")
-
 public class PojoListener {
 
-	// TODO PL01 - What annotation is used when we want to do something just before object is INSERT'd in the database?
+	/**
+	 * PL01: Lifecycle event method called just before the entity is persisted (INSERT operation).
+	 *
+	 * @param pojoBase The entity object being persisted.
+	 */
+	@PrePersist
 	public void setCreatedOnDate(PojoBase pojoBase) {
 		LocalDateTime now = LocalDateTime.now();
-		// TODO PL02 - What member field(s) do we wish to alter just before object is INSERT'd in the database?
+		// Initialize both 'created' and 'updated' fields during entity insertion
+		pojoBase.setCreated(now); // Sets the creation timestamp
+		pojoBase.setUpdated(now); // Sets the updated timestamp initially to match created timestamp
 	}
 
-	// TODO PL03 - What annotation is used when we want to do something just before object is UPDATE'd in the database?
+	/**
+	 * PL03: Lifecycle event method called just before the entity is updated (UPDATE operation).
+	 *
+	 * @param pojoBase The entity object being updated.
+	 */
+	@PreUpdate
 	public void setUpdatedDate(PojoBase pojoBase) {
-		// TODO PL04 - What member field(s) do we wish to alter just before object is UPDATE'd in the database?
+		// Updates only the 'updated' field during entity update
+		pojoBase.setUpdated(LocalDateTime.now());
 	}
-
 }

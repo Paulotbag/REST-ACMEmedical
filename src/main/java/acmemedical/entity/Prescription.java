@@ -1,53 +1,34 @@
-/********************************************************************************************************
- * File:  Prescription.java Course Materials CST 8277
- *
- * @author Teddy Yap
- * 
- */
 package acmemedical.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
-
-import jakarta.persistence.Access;
-import jakarta.persistence.AccessType;
-import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @SuppressWarnings("unused")
-/**
- * The persistent class for the prescription database table.
- */
 @Entity
 @Table(name = "prescription")
 @Access(AccessType.FIELD)
 @NamedQuery(name = "Prescription.findAll", query = "SELECT p FROM Prescription p")
 public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	// Hint - What annotation is used for a composite primary key type?
+	@Serial
+	private static final long serialVersionUID = 1L; // No @Serial annotation for Java 8–11 compatibility
+
 	@EmbeddedId
 	private PrescriptionPK id;
 
-	// @MapsId is used to map a part of composite key to an entity.
 	@MapsId("physicianId")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "physician_id", referencedColumnName = "id", nullable = false)
 	private Physician physician;
 
-	//TODO PR01 - Add missing annotations.  Similar to physician, this field is a part of the composite key of this entity.  What should be the cascade and fetch types?  Reference to a patient is not optional.
+	@MapsId("patientId")
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
 	private Patient patient;
 
-	//TODO PR02 - Add missing annotations.  What should be the cascade and fetch types?
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "medicine_id", referencedColumnName = "id", nullable = false)
 	private Medicine medicine;
 
 	@Column(name = "number_of_refills")
@@ -55,7 +36,6 @@ public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implement
 
 	@Column(length = 100, name = "prescription_information")
 	private String prescriptionInformation;
-
 
 	public Prescription() {
 		id = new PrescriptionPK();
@@ -76,7 +56,7 @@ public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implement
 	}
 
 	public void setPhysician(Physician physician) {
-		id.setPhysicianId(physician.id);
+		id.setPhysicianId(physician.getId());
 		this.physician = physician;
 	}
 
@@ -85,7 +65,7 @@ public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implement
 	}
 
 	public void setPatient(Patient patient) {
-		id.setPatientId(patient.id);
+		id.setPatientId(patient.getId());
 		this.patient = patient;
 	}
 
@@ -100,7 +80,7 @@ public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implement
 	public int getNumberOfRefills() {
 		return numberOfRefills;
 	}
-	
+
 	public void setNumberOfRefills(int numberOfRefills) {
 		this.numberOfRefills = numberOfRefills;
 	}
@@ -113,6 +93,5 @@ public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implement
 		this.prescriptionInformation = prescriptionInformation;
 	}
 
-	//Inherited hashCode/equals is sufficient for this entity class
-
+	// The default hashCode and equals are sufficient for this entity class
 }
