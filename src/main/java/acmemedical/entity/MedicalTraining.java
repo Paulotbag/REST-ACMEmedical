@@ -7,32 +7,29 @@
  */
 package acmemedical.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
-
 import jakarta.persistence.*;
 
-@SuppressWarnings("unused")
+import static jakarta.persistence.FetchType.*;
 
-/**
- * The persistent class for the medical_training database table.
- */
+@SuppressWarnings("unused")
 
 @Entity(name = "MedicalTraining")
 @Table(name = "MEDICAL_TRAINING")
 public class MedicalTraining extends PojoBase implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	public static final String FIND_BY_ID = null;
 
 
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = LAZY)
 	@JoinColumn(name = "school_id") //I used the foreign key column name from medical_certificate table.
 	private MedicalSchool school;
 
 	// TODO MT04 - Add annotations for 1:1.  What should be the cascade and fetch types?
-	@OneToOne(mappedBy="medicalTraining", cascade = CascadeType.ALL, fetch = FetchType.LAZY) //field in the MedicalCertificate class. Maybe review the fetch type
+	@OneToOne(mappedBy="medicalTraining", cascade = CascadeType.ALL) //field in the MedicalCertificate class. Maybe review the fetch type
 	private MedicalCertificate certificate;
 
 	@Embedded
@@ -52,7 +49,7 @@ public class MedicalTraining extends PojoBase implements Serializable {
 
 	/**
 	 *
-	 * @param school
+	 * school
 	 */
 	public void setMedicalSchool(MedicalSchool school) {
 		this.school = school;
@@ -68,7 +65,7 @@ public class MedicalTraining extends PojoBase implements Serializable {
 
 	/**
 	 *
-	 * @param certificate
+	 *  certificate
 	 */
 	public void setCertificate(MedicalCertificate certificate) {
 		this.certificate = certificate;
@@ -84,7 +81,7 @@ public class MedicalTraining extends PojoBase implements Serializable {
 
 	/**
 	 *
-	 * @param durationAndStatus
+	 * durationAndStatus
 	 */
 	public void setDurationAndStatus(DurationAndStatus durationAndStatus) {
 		this.durationAndStatus = durationAndStatus;
@@ -110,8 +107,8 @@ public class MedicalTraining extends PojoBase implements Serializable {
 
 	/**
 	 *
-	 * @param obj
-	 * @return boolean
+	 * obj
+	 * boolean
 	 */
 	@Override
 	public boolean equals(Object obj) {
