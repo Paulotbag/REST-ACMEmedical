@@ -1,1 +1,10 @@
 /target/
+/shelf/
+/workspace.xml
+.idea
+/.idea
+/.settings
+/target
+settings
+/META-INF
+META-INF/
