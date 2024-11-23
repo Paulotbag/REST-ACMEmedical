@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * File:  MedicalSchoolResource.java Course Materials CST 8277
  *
- * @author Teddy Yap
+ * @author Teddy Yap 
  * @author Shariar (Shawn) Emami
  * @implemented Azadeh Sadeghtehrani
  * 
