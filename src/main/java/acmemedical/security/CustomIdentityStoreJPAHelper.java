@@ -3,6 +3,7 @@
  * 
  * @author Teddy Yap
  * @author Mike Norman
+ * Implemented by: Paulo Granjeiro
  * 
  */
 package acmemedical.security;
@@ -37,12 +38,15 @@ public class CustomIdentityStoreJPAHelper {
     @PersistenceContext(name = PU_NAME)
     protected EntityManager em;
 
+    /**
+     *
+     * @param username
+     * @return SecurityUser
+     */
     public SecurityUser findUserByName(String username) {
         LOG.debug("find a SecurityUser by name = {}", username);
         SecurityUser user = null;
-        /* TODO CISJPAH01 - 
-         *  Call the entity manager's createNamedQuery() method to call a named query on SecurityUser
-         *  The named query should be labeled "SecurityUser.userByName" and accepts a parameter called "param1"
+        /*
          *  
          *  Call getSingleResult() inside a try-catch statement (NoResultException)
          *  
@@ -50,9 +54,27 @@ public class CustomIdentityStoreJPAHelper {
          *         requests will fail, none of the REST'ful endpoints will work.
          *  
          */
+        try{
+            // Create a named query to find the user by username
+            TypedQuery<SecurityUser> findUserQuery = em.createNamedQuery("SecurityUser.userByName", SecurityUser.class);
+
+            // Set the parameter for the query
+            findUserQuery.setParameter(PARAM1, username);
+
+            // Execute the query and retrieve the single result
+            user = findUserQuery.getSingleResult();
+        } catch (NoResultException e){
+            System.out.println("An error occurred: " + e.getMessage());
+            user = null;
+        }
         return user;
     }
 
+    /**
+     *
+     * @param username
+     * @return Set<String>
+     */
     public Set<String> findRoleNamesForUser(String username) {
         LOG.debug("find Roles For Username={}", username);
         Set<String> roleNames = emptySet();
@@ -63,12 +85,20 @@ public class CustomIdentityStoreJPAHelper {
         return roleNames;
     }
 
+    /**
+     *
+     * @param user
+     */
     @Transactional
     public void saveSecurityUser(SecurityUser user) {
         LOG.debug("adding new user={}", user);
         em.persist(user);
     }
 
+    /**
+     *
+     * @param role
+     */
     @Transactional
     public void saveSecurityRole(SecurityRole role) {
         LOG.debug("adding new role={}", role);

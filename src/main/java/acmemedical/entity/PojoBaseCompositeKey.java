@@ -9,16 +9,17 @@
  */
 package acmemedical.entity;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.*;
 
 /**
  * Abstract class that is the base of (class) hierarchy for all @Entity classes using composite keys
  */
 @MappedSuperclass  // PC01 - Defines this class as the superclass of all entities with composite keys.
-@EntityListeners(PojoBaseCompositeKeyListener.class)  // PC03 - Registers listener class for entity lifecycle events.
+@EntityListeners(PojoBaseCompositeKey.class)  // PC03 - Registers listener class for entity lifecycle events.
 @Access(AccessType.FIELD)  // PC02 - Instructs JPA to place all annotations on fields.
 public abstract class PojoBaseCompositeKey<ID extends Serializable> implements Serializable {
     private static final long serialVersionUID = 1L;

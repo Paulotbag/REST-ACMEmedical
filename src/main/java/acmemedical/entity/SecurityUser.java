@@ -1,52 +1,65 @@
-/********************************************************************************************************
- * File:  SecurityUser.java Course Materials CST 8277
- *
- * @author Teddy Yap
- * @author Shariar (Shawn) Emami
- * 
- */
 package acmemedical.entity;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.SerializerProvider;
+
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+// Annotate class as an entity
 @SuppressWarnings("unused")
-
-/**
- * User class used for (JSR-375) Jakarta EE Security authorization/authentication
- */
-
-//TODO SU01 - Make this into JPA entity and add all the necessary annotations inside the class.
+@Entity(name = "SecurityUser")
+@Table(name = "SECURITY_USER")
+@NamedQuery(
+        name = "SecurityUser.userByName",
+        query = "SELECT u FROM SecurityUser u WHERE u.username = :param1"
+)
+@JsonSerialize(using = SecurityUser.SecurityUserSerializer.class) // Custom serializer
 public class SecurityUser implements Serializable, Principal {
-    /** Explicit set serialVersionUID */
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    //TODO SU02 - Add annotations.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     protected int id;
-    
-    //TODO SU03 - Add annotations.
-    protected String username;
-    
-    //TODO SU04 - Add annotations.
-    protected String pwHash;
-    
-    //TODO SU05 - Add annotations.
-    protected Physician physician;
-    
-    //TODO SU06 - Add annotations.
-    protected Set<SecurityRole> roles = new HashSet<SecurityRole>();
 
+    @Column(name = "username", nullable = false, unique = true)
+    protected String username;
+
+    @Column(name = "password_hash", nullable = false)
+    protected String pwHash;
+
+    @OneToOne
+    @JoinColumn(name = "physician_id", referencedColumnName = "id")
+    protected Physician physician;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_has_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    protected Set<SecurityRole> roles = new HashSet<>();
+
+    // Default constructor
     public SecurityUser() {
         super();
     }
 
+    // Getters and setters
     public int getId() {
         return id;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
@@ -54,7 +67,7 @@ public class SecurityUser implements Serializable, Principal {
     public String getUsername() {
         return username;
     }
-    
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -62,29 +75,31 @@ public class SecurityUser implements Serializable, Principal {
     public String getPwHash() {
         return pwHash;
     }
-    
+
     public void setPwHash(String pwHash) {
         this.pwHash = pwHash;
     }
 
-    // TODO SU07 - Setup custom JSON serializer
     public Set<SecurityRole> getRoles() {
         return roles;
     }
-    
+
     public void setRoles(Set<SecurityRole> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(SecurityRole role) {
+        roles.add(role);
     }
 
     public Physician getPhysician() {
         return physician;
     }
-    
+
     public void setPhysician(Physician physician) {
         this.physician = physician;
     }
 
-    // Principal
     @Override
     public String getName() {
         return getUsername();
@@ -93,11 +108,9 @@ public class SecurityUser implements Serializable, Principal {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
-        // Only include member variables that really contribute to an object's identity
-        // i.e. if variables like version/updated/name/etc. change throughout an object's lifecycle,
-        // they shouldn't be part of the hashCode calculation
-        return prime * result + Objects.hash(getId());
+        int result = 1;
+        result = prime * result + Objects.hash(getId());
+        return result;
     }
 
     @Override
@@ -109,8 +122,6 @@ public class SecurityUser implements Serializable, Principal {
             return false;
         }
         if (obj instanceof SecurityUser otherSecurityUser) {
-            // See comment (above) in hashCode():  Compare using only member variables that are
-            // truly part of an object's identity
             return Objects.equals(this.getId(), otherSecurityUser.getId());
         }
         return false;
@@ -118,9 +129,31 @@ public class SecurityUser implements Serializable, Principal {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("SecurityUser [id = ").append(id).append(", username = ").append(username).append("]");
-        return builder.toString();
+        return "SecurityUser [id=" + id + ", username=" + username + "]";
     }
-    
+
+    /**
+     * Custom JSON Serializer for SecurityUser class.
+     */
+    public static class SecurityUserSerializer extends JsonSerializer<SecurityUser> {
+        @Override
+        public void serialize(SecurityUser user, JsonGenerator gen, SerializerProvider serializers) {
+            try {
+                gen.writeStartObject();
+                gen.writeNumberField("id", user.getId());
+                gen.writeStringField("username", user.getUsername());
+                if (user.getPhysician() != null) {
+                    gen.writeObjectField("physician", user.getPhysician());
+                }
+                gen.writeArrayFieldStart("roles");
+                for (SecurityRole role : user.getRoles()) {
+                    gen.writeString(role.getRoleName()); // Assuming SecurityRole has a getRoleName() method.
+                }
+                gen.writeEndArray();
+                gen.writeEndObject();
+            } catch (Exception e) {
+                throw new RuntimeException("Error serializing SecurityUser", e);
+            }
+        }
+    }
 }

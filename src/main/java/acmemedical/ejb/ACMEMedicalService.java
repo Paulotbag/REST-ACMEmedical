@@ -3,6 +3,7 @@
  *
  * @author Teddy Yap
  * @author Shariar (Shawn) Emami
+ * @implemented by Azadeh Sadeghtehrani
  * 
  */
 package acmemedical.ejb;
@@ -97,6 +98,7 @@ public class ACMEMedicalService implements Serializable {
         SecurityUser userForNewPhysician = new SecurityUser();
         userForNewPhysician.setUsername(
             DEFAULT_USER_PREFIX + "_" + newPhysician.getFirstName() + "." + newPhysician.getLastName());
+        
         Map<String, String> pbAndjProperties = new HashMap<>();
         pbAndjProperties.put(PROPERTY_ALGORITHM, DEFAULT_PROPERTY_ALGORITHM);
         pbAndjProperties.put(PROPERTY_ITERATIONS, DEFAULT_PROPERTY_ITERATIONS);
@@ -106,7 +108,11 @@ public class ACMEMedicalService implements Serializable {
         String pwHash = pbAndjPasswordHash.generate(DEFAULT_USER_PASSWORD.toCharArray());
         userForNewPhysician.setPwHash(pwHash);
         userForNewPhysician.setPhysician(newPhysician);
-        SecurityRole userRole = /* TODO ACMECS01 - Use NamedQuery on SecurityRole to find USER_ROLE */ null;
+        
+     // TODO ACMECS01 - Use NamedQuery on SecurityRole to find USER_ROLE
+        TypedQuery<SecurityRole> roleQuery = em.createNamedQuery(SecurityRole.FIND_BY_NAME, SecurityRole.class);
+        roleQuery.setParameter("roleName", USER_ROLE);
+        SecurityRole userRole = roleQuery.getSingleResult();
         userForNewPhysician.getRoles().add(userRole);
         userRole.getUsers().add(userForNewPhysician);
         em.persist(userForNewPhysician);
@@ -165,11 +171,12 @@ public class ACMEMedicalService implements Serializable {
         Physician physician = getPhysicianById(id);
         if (physician != null) {
             em.refresh(physician);
-            TypedQuery<SecurityUser> findUser = 
             /* TODO ACMECS02 - Use NamedQuery on SecurityRole to find this related Student
                so that when we remove it, the relationship from SECURITY_USER table
                is not dangling
-            */ null;
+            */
+            TypedQuery<SecurityUser> findUser = em.createNamedQuery(SecurityUser.FIND_BY_PHYSICIAN_ID, SecurityUser.class);
+            findUser.setParameter("physicianId", id);
             SecurityUser sUser = findUser.getSingleResult();
             em.remove(sUser);
             em.remove(physician);
