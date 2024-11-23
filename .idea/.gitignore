@@ -6,3 +6,5 @@
 /.settings
 /target
 settings
+/META-INF
+META-INF/
