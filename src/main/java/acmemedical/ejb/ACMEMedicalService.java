@@ -110,9 +110,12 @@ public class ACMEMedicalService implements Serializable {
         userForNewPhysician.setPhysician(newPhysician);
         
      // TODO ACMECS01 - Use NamedQuery on SecurityRole to find USER_ROLE
-        TypedQuery<SecurityRole> roleQuery = em.createNamedQuery(SecurityRole.FIND_BY_NAME, SecurityRole.class);
-        roleQuery.setParameter("roleName", USER_ROLE);
-        SecurityRole userRole = roleQuery.getSingleResult();
+        SecurityRole userRole = em.createQuery(
+                "SELECT r FROM SecurityRole r WHERE r.roleName = :roleName", SecurityRole.class)
+                .setParameter("roleName", USER_ROLE)
+                .getSingleResult();
+        
+        
         userForNewPhysician.getRoles().add(userRole);
         userRole.getUsers().add(userForNewPhysician);
         em.persist(userForNewPhysician);
@@ -175,8 +178,10 @@ public class ACMEMedicalService implements Serializable {
                so that when we remove it, the relationship from SECURITY_USER table
                is not dangling
             */
-            TypedQuery<SecurityUser> findUser = em.createNamedQuery(SecurityUser.FIND_BY_PHYSICIAN_ID, SecurityUser.class);
-            findUser.setParameter("physicianId", id);
+            TypedQuery<SecurityUser> findUser = em.createQuery(
+                    "SELECT u FROM SecurityUser u WHERE u.physician.id = :physicianId", SecurityUser.class)
+                    .setParameter("physicianId", physician.getId());
+            
             SecurityUser sUser = findUser.getSingleResult();
             em.remove(sUser);
             em.remove(physician);

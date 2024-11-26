@@ -21,9 +21,15 @@ import java.io.Serializable;
 )
 @Entity(name = "MedicalCertificate")
 @Table(name = "MEDICAL_CERTIFICATE")
+@NamedQuery(
+	    name = MedicalCertificate.ID_CARD_QUERY_NAME,
+	    query = "SELECT mc FROM MedicalCertificate mc WHERE mc.id = :id"
+)
+
 public class MedicalCertificate extends PojoBase implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	public static final String ID_CARD_QUERY_NAME = "MedicalCertificate.findById";
 	// TODO MC03 - Add annotations for 1:1 mapping.  What should be the cascade and fetch types? I THINK THIS SHOULD BE M:1
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "training_id", referencedColumnName="training_id")//I used the foreign key column name from medical_certificate table. referencedColumnName is the name of the ID column in the training table.
