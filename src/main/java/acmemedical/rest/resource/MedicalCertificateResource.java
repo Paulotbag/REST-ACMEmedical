@@ -1,6 +1,7 @@
 package acmemedical.rest.resource;
 
 import static acmemedical.utility.MyConstants.ADMIN_ROLE;
+import static acmemedical.utility.MyConstants.USER_ROLE;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
