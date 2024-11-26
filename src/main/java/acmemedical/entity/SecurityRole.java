@@ -12,7 +12,10 @@ import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.*;
-
+@NamedQuery(
+        name = "SecurityRole.FIND_BY_NAME",
+        query = "SELECT sr FROM SecurityRole sr WHERE sr.roleName = :roleName"
+)
 @SuppressWarnings("unused")
 @Entity // SR01 - Defines this class as a JPA entity.
 @Table(name = "security_role") // Maps the entity to the "security_role" table in the database.
@@ -93,4 +96,5 @@ public class SecurityRole implements Serializable {
     public String toString() {
         return "SecurityRole [id=" + id + ", roleName=" + roleName + "]";
     }
+
 }
