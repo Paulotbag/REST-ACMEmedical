@@ -102,12 +102,13 @@ public class PhysicianResource {
     }
 
     /**
-     * Update medicine for a physician-patient relationship (ADMIN_ROLE only).
-     *
-     * @param physicianId ID of the physician.
-     * @param patientId ID of the patient.
-     * @param newMedicine New medicine to associate.
-     * @return Response with the updated medicine.
+     * Updates the medicine associated with a physician-patient relationship.
+     * Only accessible by users with {@link #ADMIN_ROLE}.
+     * 
+     * @param physicianId The ID of the physician.
+     * @param patientId The ID of the patient.
+     * @param newMedicine The new medicine to associate.
+     * @return Response containing the updated medicine.
      */
     @PUT
     @RolesAllowed({ADMIN_ROLE})
@@ -119,4 +120,32 @@ public class PhysicianResource {
         Medicine updatedMedicine = service.setMedicineForPhysicianPatient(physicianId, patientId, newMedicine);
         return Response.ok(updatedMedicine).build();
     }
+
+    /**
+     * Deletes a physician (ADMIN_ROLE only).
+     *
+     * @param id The ID of the physician to delete.
+     * @return Response indicating the result of the deletion.
+     */
+    @DELETE
+    @RolesAllowed({ADMIN_ROLE})
+    @Path("{id}")
+    public Response deletePhysician(@PathParam("id") int id) {
+        LOG.debug("Deleting physician with ID: {}", id);
+        
+        try {
+            // Call the service method to delete the physician
+            service.deletePhysicianById(id);
+            
+            // Return success response
+            return Response.noContent().build(); // 204 No Content for successful deletion
+        } catch (Exception e) {
+            // Log and handle any exceptions that might occur (e.g., physician not found)
+            LOG.error("Error deleting physician with ID: {}", id, e);
+            return Response.status(Status.NOT_FOUND)
+                           .entity("Physician not found or an error occurred.")
+                           .build(); // 404 if physician not found or error occurs
+        }
+    }
+
 }
