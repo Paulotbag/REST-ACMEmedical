@@ -3,7 +3,7 @@
  *
  * @author Teddy Yap
  * @implemented by Azadeh Sadeghtehrani
- * 
+ *
  */
 package acmemedical.entity;
 
@@ -11,61 +11,71 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
 
 /**
  * The persistent class for the medical_school database table.
  */
 @Entity
 @Table(name = "medical_school")
+@NamedQueries({
+		@NamedQuery(
+				name = "MedicalSchool.ALL_MEDICAL_SCHOOLS_QUERY_NAME",
+				query = "SELECT ms FROM MedicalSchool ms"
+		),
+		@NamedQuery(
+				name = "MedicalSchool.SPECIFIC_MEDICAL_SCHOOL_QUERY_NAME",
+				query = "SELECT ms FROM MedicalSchool ms WHERE ms.id = :param1"
+		),
+		@NamedQuery(
+				name = "MedicalSchool.IS_DUPLICATE_QUERY_NAME",
+				query = "SELECT COUNT(ms) FROM MedicalSchool ms WHERE ms.name = :param1"
+		)
+})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-
-//TODO MS03 - Do we need a mapped super class?  If so, which one?
-//In this code, MedicalSchool does not need to be a @MappedSuperclass 
-//because it is an entity that should have its own table representation
-
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = PublicSchool.class, name = "public"),
-    @JsonSubTypes.Type(value = PrivateSchool.class, name = "private")
-       
+		@JsonSubTypes.Type(value = PublicSchool.class, name = "public"),
+		@JsonSubTypes.Type(value = PrivateSchool.class, name = "private")
 })
 public abstract class MedicalSchool extends PojoBase implements Serializable {
-	
-	public static final String IS_DUPLICATE_QUERY_NAME = null;
-	public static final String SPECIFIC_MEDICAL_SCHOOL_QUERY_NAME = null;
-	public static final String ALL_MEDICAL_SCHOOLS_QUERY_NAME = null;
+
+	public static final String IS_DUPLICATE_QUERY_NAME = "MedicalSchool.IS_DUPLICATE_QUERY_NAME";
+	public static final String SPECIFIC_MEDICAL_SCHOOL_QUERY_NAME = "MedicalSchool.SPECIFIC_MEDICAL_SCHOOL_QUERY_NAME";
+	public static final String ALL_MEDICAL_SCHOOLS_QUERY_NAME = "MedicalSchool.ALL_MEDICAL_SCHOOLS_QUERY_NAME";
 	private static final long serialVersionUID = 1L;
-	
-    @Column(name = "name", nullable = false, unique = true)
+
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 
-    @OneToMany(mappedBy = "medicalSchool", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<MedicalTraining> medicalTrainings = new HashSet<>();
 
-    @Column(name = "is_public", nullable = false)
+	@Column(name = "is_public", nullable = false)
 	private boolean isPublic;
 
 	public MedicalSchool() {
 		super();
 	}
 
-    public MedicalSchool(boolean isPublic) {
-        this();
-        this.isPublic = isPublic;
-    }
+	public MedicalSchool(boolean isPublic) {
+		this();
+		this.isPublic = isPublic;
+	}
 
-    // No specific annotation needed for this getter.
 	public Set<MedicalTraining> getMedicalTrainings() {
 		return medicalTrainings;
 	}
@@ -82,23 +92,10 @@ public abstract class MedicalSchool extends PojoBase implements Serializable {
 		return name;
 	}
 
-	//Inherited hashCode/equals is NOT sufficient for this entity class
-	
-	/**
-	 * Very important:  Use getter's for member variables because JPA sometimes needs to intercept those calls<br/>
-	 * and go to the database to retrieve the value
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		// Only include member variables that really contribute to an object's identity
-		// i.e. if variables like version/updated/name/etc. change throughout an object's lifecycle,
-		// they shouldn't be part of the hashCode calculation
-		
-		// The database schema for the MEDICAL_SCHOOL table has a UNIQUE constraint for the NAME column,
-		// so we should include that in the hash/equals calculations
-		
 		return prime * result + Objects.hash(getId(), getName());
 	}
 
@@ -110,12 +107,10 @@ public abstract class MedicalSchool extends PojoBase implements Serializable {
 		if (obj == null) {
 			return false;
 		}
-		
+
 		if (obj instanceof MedicalSchool otherMedicalSchool) {
-			// See comment (above) in hashCode():  Compare using only member variables that are
-			// truly part of an object's identity
 			return Objects.equals(this.getId(), otherMedicalSchool.getId()) &&
-				Objects.equals(this.getName(), otherMedicalSchool.getName());
+					Objects.equals(this.getName(), otherMedicalSchool.getName());
 		}
 		return false;
 	}

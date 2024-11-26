@@ -33,4 +33,5 @@ public class MedicalTrainingResource {
         );
         return Response.ok(medicalTrainings).build();
     }
+
 }

@@ -13,7 +13,14 @@ import java.security.Principal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
+@NamedQuery(
+        name = "SecurityUser.FIND_BY_PHYSICIAN_ID",
+        query = "SELECT su FROM SecurityUser su WHERE su.physician.id = :physicianId"
+)
+@NamedQuery(
+        name = "SecurityUser.userByName",
+        query = "SELECT u FROM SecurityUser u WHERE u.username = :param1"
+)
 // Annotate class as an entity
 @SuppressWarnings("unused")
 @Entity(name = "SecurityUser")

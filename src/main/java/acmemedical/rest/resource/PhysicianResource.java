@@ -65,18 +65,22 @@ public class PhysicianResource {
         Physician physician = null;
 
         if (sc.isCallerInRole(ADMIN_ROLE)) {
+            // ADMIN_ROLE can access any physician
             physician = service.getPhysicianById(id);
             if (physician == null) {
                 return Response.status(Status.NOT_FOUND).build();
             }
         } else if (sc.isCallerInRole(USER_ROLE)) {
+            // USER_ROLE can only access their associated physician
             WrappingCallerPrincipal wCallerPrincipal = (WrappingCallerPrincipal) sc.getCallerPrincipal();
             SecurityUser sUser = (SecurityUser) wCallerPrincipal.getWrapped();
-            physician = sUser.getPhysician();
+            physician = sUser.getPhysician(); // Fetch the associated physician
             if (physician == null || physician.getId() != id) {
+                // Access denied if the IDs do not match
                 throw new ForbiddenException("Access denied to this resource");
             }
         } else {
+            // Invalid role or missing permissions
             return Response.status(Status.BAD_REQUEST).build();
         }
         return Response.ok(physician).build();
