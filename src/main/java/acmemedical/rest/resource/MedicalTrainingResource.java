@@ -29,9 +29,8 @@ public class MedicalTrainingResource {
     public Response getAllMedicalTrainings() {
         List<MedicalTraining> medicalTrainings = service.getAll(
                 MedicalTraining.class,
-                "MedicalTraining.ALL_MEDICAL_TRAININGS_QUERY"
+                MedicalTraining.ALL_MEDICAL_TRAININGS_QUERY
         );
         return Response.ok(medicalTrainings).build();
     }
-
 }
