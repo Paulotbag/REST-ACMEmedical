@@ -13,6 +13,10 @@ import static jakarta.persistence.FetchType.*;
 		@NamedQuery(
 				name = "MedicalTraining.ALL_MEDICAL_TRAININGS_QUERY",
 				query = "SELECT mt FROM MedicalTraining mt"
+		),
+		@NamedQuery(
+				name = "MedicalTraining.FIND_BY_ID",
+				query = "SELECT mt FROM MedicalTraining mt WHERE mt.id = :id"
 		)
 })
 public class MedicalTraining extends PojoBase implements Serializable {
@@ -20,9 +24,10 @@ public class MedicalTraining extends PojoBase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String ALL_MEDICAL_TRAININGS_QUERY = "MedicalTraining.ALL_MEDICAL_TRAININGS_QUERY";
+	public static final String FIND_BY_ID = "MedicalTraining.FIND_BY_ID";
 
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = LAZY)
-	@JoinColumn(name = "school_id") // Foreign key column from medical_certificate table.
+	@JoinColumn(name = "school_id") // Foreign key column from the medical_training table.
 	private MedicalSchool school;
 
 	@OneToOne(mappedBy = "medicalTraining", cascade = CascadeType.ALL) // Field in the MedicalCertificate class.
