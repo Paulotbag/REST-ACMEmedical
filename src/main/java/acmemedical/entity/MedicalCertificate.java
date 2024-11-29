@@ -15,17 +15,12 @@ import java.io.Serializable;
 /**
  * The persistent class for the medical_certificate database table.
  */
-@NamedQuery(
-		name = "MedicalCertificate.ID_CARD_QUERY_NAME",
-		query = "SELECT mc FROM MedicalCertificate mc WHERE mc.id = :id"
-)
 @Entity(name = "MedicalCertificate")
 @Table(name = "MEDICAL_CERTIFICATE")
 @NamedQuery(
 	    name = MedicalCertificate.ID_CARD_QUERY_NAME,
 	    query = "SELECT mc FROM MedicalCertificate mc WHERE mc.id = :id"
 )
-
 public class MedicalCertificate extends PojoBase implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

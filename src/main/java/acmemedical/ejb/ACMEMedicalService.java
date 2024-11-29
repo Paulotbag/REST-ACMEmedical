@@ -286,5 +286,79 @@ public class ACMEMedicalService implements Serializable {
         }
         return medicalTrainingToBeUpdated;
     }
-    
+
+    /**
+     * Create a new MedicalCertificate and persist it in the database.
+     *
+     * @param medicalCertificate New MedicalCertificate to persist.
+     * @return The persisted MedicalCertificate.
+     */
+    @Transactional
+    public MedicalCertificate createMedicalCertificate(MedicalCertificate medicalCertificate) {
+        if (medicalCertificate == null) {
+            throw new IllegalArgumentException("MedicalCertificate cannot be null");
+        }
+        em.persist(medicalCertificate);
+        return medicalCertificate;
+    }
+
+    /**
+     * Retrieve a MedicalCertificate by its ID.
+     *
+     * @param id ID of the MedicalCertificate to retrieve.
+     * @return The MedicalCertificate if found, or null otherwise.
+     */
+    public MedicalCertificate getMedicalCertificateById(int id) {
+        return em.find(MedicalCertificate.class, id);
+    }
+
+    /**
+     * Update an existing MedicalCertificate by its ID.
+     *
+     * @param id ID of the MedicalCertificate to update.
+     * @param medicalCertificate Updated data for the MedicalCertificate.
+     * @return The updated MedicalCertificate, or null if the ID does not exist.
+     */
+    @Transactional
+    public MedicalCertificate updateMedicalCertificate(int id, MedicalCertificate medicalCertificate) {
+        LOG.debug("Updating MedicalCertificate with ID: {}", id);
+
+        // Fetch the existing MedicalCertificate
+        MedicalCertificate existingCertificate = em.find(MedicalCertificate.class, id);
+
+        if (existingCertificate != null) {
+            // Update the existing certificate's fields with values from the input object (medicalCertificate)
+            if (medicalCertificate.getMedicalTraining() != null) {
+                existingCertificate.setMedicalTraining(medicalCertificate.getMedicalTraining());
+            }
+            if (medicalCertificate.getOwner() != null) {
+                existingCertificate.setOwner(medicalCertificate.getOwner());
+            }
+            // Use the existing `setSigned` method for the `signed` field
+            existingCertificate.setSigned(medicalCertificate.getSigned());
+
+            // Merge and return the updated entity
+            em.merge(existingCertificate);
+            return existingCertificate;
+        }
+
+        LOG.debug("MedicalCertificate with ID: {} not found.", id);
+        return null;
+    }
+
+    /**
+     * Delete a MedicalCertificate by its ID.
+     *
+     * @param id ID of the MedicalCertificate to delete.
+     * @return True if the deletion was successful, false otherwise.
+     */
+    @Transactional
+    public boolean deleteMedicalCertificate(int id) {
+        MedicalCertificate certificate = em.find(MedicalCertificate.class, id);
+        if (certificate == null) {
+            return false; // Certificate not found
+        }
+        em.remove(certificate);
+        return true;
+    }
 }

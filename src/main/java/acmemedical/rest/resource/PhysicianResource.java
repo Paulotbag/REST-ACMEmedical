@@ -103,7 +103,7 @@ public class PhysicianResource {
 
     /**
      * Updates the medicine associated with a physician-patient relationship.
-     * Only accessible by users with {@link #ADMIN_ROLE}.
+     * Only accessible by users with {@link #//ADMIN_ROLE}.
      * 
      * @param physicianId The ID of the physician.
      * @param patientId The ID of the patient.
