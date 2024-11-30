@@ -75,6 +75,10 @@ public abstract class MedicalSchool extends PojoBase implements Serializable {
 		this();
 		this.isPublic = isPublic;
 	}
+	
+    public boolean isPublic() {
+        return isPublic;
+    }
 
 	public Set<MedicalTraining> getMedicalTrainings() {
 		return medicalTrainings;
