@@ -9,9 +9,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import jakarta.ws.rs.core.SecurityContext;
 
 
 import acmemedical.ejb.ACMEMedicalService;
@@ -66,15 +66,16 @@ public class MedicalCertificateResource {
                            .entity("Medical Certificate with ID " + id + " not found.")
                            .build();
         }
-        
+
 
         // Ensure that the certificate belongs to the currently authenticated user (USER_ROLE only)
-        if (securityContext.isCallerInRole(USER_ROLE)) {
-            // Assuming that MedicalCertificate has a method getUser() returning the user who owns it
-            if (!certificate.getOwner().getFirstName().equals(securityContext.getUserPrincipal().getName())) {
+        if (securityContext.isUserInRole(USER_ROLE)) {  // Check if the user has the role
+            // Assuming that MedicalCertificate has a method getOwner() returning the user who owns it
+            String currentUser = securityContext.getUserPrincipal().getName();
+            if (!certificate.getOwner().getFirstName().equals(currentUser)) {
                 return Response.status(Response.Status.FORBIDDEN)
-                               .entity("You are not authorized to access this certificate.")
-                               .build(); // Not the user's certificate
+                        .entity("You are not authorized to access this certificate.")
+                        .build(); // Not the user's certificate
             }
         }
 
