@@ -28,7 +28,7 @@ public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implement
 	private Patient patient;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "medicine_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "medicine_id", nullable = false) //Paulo: I removed the referencedColumnName = "id" from here.
 	private Medicine medicine;
 
 	@Column(name = "number_of_refills")
