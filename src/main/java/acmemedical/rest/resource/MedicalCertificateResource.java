@@ -1,8 +1,5 @@
 package acmemedical.rest.resource;
 
-import static acmemedical.utility.MyConstants.ADMIN_ROLE;
-import static acmemedical.utility.MyConstants.USER_ROLE;
-
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
@@ -17,9 +14,10 @@ import org.apache.logging.log4j.Logger;
 import acmemedical.ejb.ACMEMedicalService;
 import acmemedical.entity.MedicalCertificate;
 
+import static acmemedical.utility.MyConstants.*;
 
 
-@Path("medicalCertificates")
+@Path(MEDICAL_CERTIFICATE_RESOURCE_NAME)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class MedicalCertificateResource {
