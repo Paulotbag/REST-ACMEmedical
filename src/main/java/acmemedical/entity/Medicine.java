@@ -28,8 +28,8 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the medicine database table.
  */
-@Entity
-@Table(name = "medicine") 
+@Entity(name = "Medicine")
+@Table(name = "MEDICINE")
 @NamedQuery(name = "Medicine.findAll", query = "SELECT m FROM Medicine m")
 @AttributeOverride(name = "id", column = @Column(name = "medicine_id"))
 public class Medicine extends PojoBase implements Serializable {
@@ -49,7 +49,7 @@ public class Medicine extends PojoBase implements Serializable {
 
 	@Transient
 	private String chemicalName;
-	
+
 	@Transient
 	private String genericName;
 
@@ -59,7 +59,7 @@ public class Medicine extends PojoBase implements Serializable {
 	public Medicine() {
 		super();
 	}
-	
+
 	public Medicine(String drugName, String manufacturerName, String dosageInformation, Set<Prescription> prescriptions) {
 		this();
 		this.drugName = drugName;
@@ -138,7 +138,7 @@ public class Medicine extends PojoBase implements Serializable {
 	public int hashCode() {
 		return Objects.hash(getId(), drugName, manufacturerName);
 	}
- 
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

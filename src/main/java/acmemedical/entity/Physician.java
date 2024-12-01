@@ -36,7 +36,7 @@ public class Physician extends PojoBase implements Serializable {
 	private String lastName;
 
 
-	@OneToMany(mappedBy = "physician", cascade= CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "owner", cascade= CascadeType.ALL, fetch = FetchType.LAZY) //Paulo: I changed mappedBy from "physician" to "owner"
 	private Set<MedicalCertificate> medicalCertificates = new HashSet<>();
 
 
