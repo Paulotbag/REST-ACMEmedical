@@ -18,6 +18,7 @@ import static acmemedical.utility.MyConstants.PROPERTY_ITERATIONS;
 import static acmemedical.utility.MyConstants.PROPERTY_KEY_SIZE;
 import static acmemedical.utility.MyConstants.PROPERTY_SALT_SIZE;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,21 @@ public class PBKDF2HashGenerator {
     // but they are not visible, so type in them all over again :-( Hope there are no typos!
 
     public static void main(String[] args) {
+    	
+    	//testing//
+//    	String testPassword = "TestPassword123";
+//        String hash = generateHash(testPassword);
+//        System.out.println("Generated hash: " + hash);
+//        
+//        if (args.length == 0) {
+//            System.err.println("Error: Please provide a password as a command-line argument.");
+//            System.exit(1); // Exit with a non-zero status to indicate failure.
+//        }
+//
+//        String testPassword2 = args[0];
+//        String hash = generateHash(testPassword);
+//        System.out.println("Generated hash: " + hash);
+        //testing//
         
         Pbkdf2PasswordHash pbAndjPasswordHash = new Pbkdf2PasswordHashImpl();
 
@@ -45,4 +61,22 @@ public class PBKDF2HashGenerator {
         String pwHash = pbAndjPasswordHash.generate(args[0].toCharArray());
         System.out.printf("Hash for %s is %s%n", args[0], pwHash);
     }
+    
+    //testing//
+//    public static String generateHash(String password) {
+//        try {
+//            // Implement PBKDF2 hash logic here
+//            // For illustration purposes:
+//            String salt = "randomSalt"; // Replace with actual salt generation
+//            int iterations = 10000; // Use your defined iterations
+//            int keyLength = 256; // Key length in bits
+//
+//            // Hash generation logic
+//            byte[] hashedPassword = java.security.MessageDigest.getInstance("SHA-256").digest((password + salt).getBytes());
+//            return Base64.getEncoder().encodeToString(hashedPassword);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Hash generation failed", e);
+//        }
+//    }
+  //testing//
 }

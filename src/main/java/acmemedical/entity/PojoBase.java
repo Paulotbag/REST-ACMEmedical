@@ -17,13 +17,13 @@ import java.util.Objects;
  * Abstract class that is base of (class) hierarchy for all @Entity classes
  */
 @MappedSuperclass  // PB01 - Defines this class as the superclass of all entities.
-@EntityListeners(PojoCompositeListener.class)  // PB03 - Registers listener class for entity lifecycle events.
 @Access(AccessType.FIELD)  // PB02 - Instructs JPA to place all annotations on fields.
+@EntityListeners(PojoCompositeListener.class)  // PB03 - Registers listener class for entity lifecycle events.
 public abstract class PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id  // PB04 - Identifies 'id' as the primary key.
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // PB04 - Configures automatic generation of IDs.
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)  // PB04 - Configures automatic generation of IDs.
     protected int id;
 
     @Version  // PB05 - Specifies that 'version' is used for optimistic locking.
