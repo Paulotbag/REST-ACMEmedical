@@ -361,4 +361,208 @@ public class ACMEMedicalService implements Serializable {
         em.remove(certificate);
         return true;
     }
+    
+    /**
+     * Retrieve all patients from the database.
+     *
+     * @return List of all patients.
+     */
+    public List<Patient> getAllPatients() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Patient> cq = cb.createQuery(Patient.class);
+        cq.select(cq.from(Patient.class));
+        return em.createQuery(cq).getResultList();
+    }
+
+    /**
+     * Retrieve a patient by their ID.
+     *
+     * @param id ID of the patient to retrieve.
+     * @return The patient if found, or null otherwise.
+     */
+    public Patient getPatientById(int id) {
+        return em.find(Patient.class, id);
+    }
+
+    /**
+     * Persist a new patient in the database.
+     *
+     * @param newPatient The patient to persist.
+     * @return The persisted patient.
+     */
+    @Transactional
+    public Patient persistPatient(Patient newPatient) {
+        em.persist(newPatient);
+        return newPatient;
+    }
+
+    /**
+     * Update an existing patient in the database.
+     *
+     * @param updatedPatient The patient with updated information.
+     * @return The updated patient, or null if the ID does not exist.
+     */
+    @Transactional
+    public Patient updatePatient(Patient updatedPatient) {
+        Patient existingPatient = getPatientById(updatedPatient.getId());
+        if (existingPatient != null) {
+            em.merge(updatedPatient);
+            return updatedPatient;
+        }
+        return null;
+    }
+
+    /**
+     * Delete a patient by their ID.
+     *
+     * @param id ID of the patient to delete.
+     * @return True if the patient was deleted, false otherwise.
+     */
+    @Transactional
+    public boolean deletePatientById(int id) {
+        Patient patient = getPatientById(id);
+        if (patient != null) {
+            em.remove(patient);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Retrieve all prescriptions from the database.
+     *
+     * @return List of all prescriptions.
+     */
+    public List<Prescription> getAllPrescriptions() {
+        TypedQuery<Prescription> query = em.createNamedQuery("Prescription.findAll", Prescription.class);
+        return query.getResultList();
+    }
+
+    /**
+     * Retrieve a prescription by its composite ID.
+     *
+     * @param physicianId Physician's ID.
+     * @param patientId Patient's ID.
+     * @return The prescription if found, or null otherwise.
+     */
+    public Prescription getPrescriptionById(int physicianId, int patientId) {
+        PrescriptionPK pk = new PrescriptionPK();
+        pk.setPhysicianId(physicianId);
+        pk.setPatientId(patientId);
+        return em.find(Prescription.class, pk);
+    }
+
+    /**
+     * Persist a new prescription in the database.
+     *
+     * @param prescription The prescription to persist.
+     * @return The persisted prescription.
+     */
+    public Prescription persistPrescription(Prescription prescription) {
+        em.persist(prescription);
+        return prescription;
+    }
+
+    /**
+     * Update an existing prescription in the database.
+     *
+     * @param physicianId Physician's ID.
+     * @param patientId Patient's ID.
+     * @param updatedPrescription The updated prescription data.
+     * @return The updated prescription if it exists, or null otherwise.
+     */
+    public Prescription updatePrescription(int physicianId, int patientId, Prescription updatedPrescription) {
+        Prescription existingPrescription = getPrescriptionById(physicianId, patientId);
+        if (existingPrescription != null) {
+            existingPrescription.setMedicine(updatedPrescription.getMedicine());
+            existingPrescription.setNumberOfRefills(updatedPrescription.getNumberOfRefills());
+            existingPrescription.setPrescriptionInformation(updatedPrescription.getPrescriptionInformation());
+            em.merge(existingPrescription);
+            return existingPrescription;
+        }
+        return null;
+    }
+
+    /**
+     * Delete a prescription by its composite ID.
+     *
+     * @param physicianId Physician's ID.
+     * @param patientId Patient's ID.
+     * @return True if the prescription was deleted, false otherwise.
+     */
+    public boolean deletePrescriptionById(int physicianId, int patientId) {
+        Prescription prescription = getPrescriptionById(physicianId, patientId);
+        if (prescription != null) {
+            em.remove(prescription);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Retrieve all medicines from the database.
+     *
+     * @return List of all medicines.
+     */
+    public List<Medicine> getAllMedicines() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Medicine> cq = cb.createQuery(Medicine.class);
+        cq.select(cq.from(Medicine.class));
+        return em.createQuery(cq).getResultList();
+    }
+
+    /**
+     * Retrieve a medicine by its ID.
+     *
+     * @param id ID of the medicine to retrieve.
+     * @return The medicine if found, or null otherwise.
+     */
+    public Medicine getMedicineById(int id) {
+        return em.find(Medicine.class, id);
+    }
+
+    /**
+     * Persist a new medicine in the database.
+     *
+     * @param newMedicine The medicine to persist.
+     * @return The persisted medicine.
+     */
+    @Transactional
+    public Medicine persistMedicine(Medicine newMedicine) {
+        em.persist(newMedicine);
+        return newMedicine;
+    }
+
+    /**
+     * Update an existing medicine in the database.
+     *
+     * @param updatedMedicine The medicine with updated information.
+     * @return The updated medicine, or null if the ID does not exist.
+     */
+    @Transactional
+    public Medicine updateMedicine(Medicine updatedMedicine) {
+        Medicine existingMedicine = getMedicineById(updatedMedicine.getId());
+        if (existingMedicine != null) {
+            em.merge(updatedMedicine);
+            return updatedMedicine;
+        }
+        return null;
+    }
+
+    /**
+     * Delete a medicine by its ID.
+     *
+     * @param id ID of the medicine to delete.
+     * @return True if the medicine was deleted, false otherwise.
+     */
+    @Transactional
+    public boolean deleteMedicineById(int id) {
+        Medicine medicine = getMedicineById(id);
+        if (medicine != null) {
+            em.remove(medicine);
+            return true;
+        }
+        return false;
+    }
+
 }
