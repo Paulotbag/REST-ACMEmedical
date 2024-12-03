@@ -29,7 +29,11 @@ import acmemedical.entity.Prescription;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PrescriptionResource {
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     private static final Logger LOG = LogManager.getLogger(PrescriptionResource.class);
 
     @Inject
@@ -63,10 +67,17 @@ public class PrescriptionResource {
     @GET
     @Path("{physicianId}/{patientId}")
     public Response getPrescription(
+<<<<<<< HEAD
         @PathParam("physicianId") int physicianId,
         @PathParam("patientId") int patientId
     ) {
     	LOG.debug("Request to retrieve prescription with physicianId: {}, patientId: {}", physicianId, patientId);
+=======
+            @PathParam("physicianId") int physicianId,
+            @PathParam("patientId") int patientId
+    ) {
+        LOG.debug("Request to retrieve prescription with physicianId: {}, patientId: {}", physicianId, patientId);
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
         try {
             Prescription prescription = medicalService.getPrescriptionById(physicianId, patientId);
             if (prescription != null) {
@@ -78,7 +89,11 @@ public class PrescriptionResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to retrieve prescription").build();
         }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     /**
      * Create a new prescription.
      *
@@ -96,7 +111,11 @@ public class PrescriptionResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to create prescription").build();
         }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     /**
      * Update an existing prescription.
      *
@@ -108,11 +127,19 @@ public class PrescriptionResource {
     @PUT
     @Path("{physicianId}/{patientId}")
     public Response updatePrescription(
+<<<<<<< HEAD
         @PathParam("physicianId") int physicianId,
         @PathParam("patientId") int patientId,
         Prescription updatedPrescription
     ) {
     	LOG.debug("Request to update prescription with physicianId: {}, patientId: {}", physicianId, patientId);
+=======
+            @PathParam("physicianId") int physicianId,
+            @PathParam("patientId") int patientId,
+            Prescription updatedPrescription
+    ) {
+        LOG.debug("Request to update prescription with physicianId: {}, patientId: {}", physicianId, patientId);
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
         try {
             Prescription prescription = medicalService.updatePrescription(physicianId, patientId, updatedPrescription);
             if (prescription != null) {
@@ -124,7 +151,11 @@ public class PrescriptionResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to update prescription").build();
         }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     /**
      * Delete a prescription by its composite ID.
      *
@@ -135,10 +166,17 @@ public class PrescriptionResource {
     @DELETE
     @Path("{physicianId}/{patientId}")
     public Response deletePrescription(
+<<<<<<< HEAD
         @PathParam("physicianId") int physicianId,
         @PathParam("patientId") int patientId
     ) {
     	LOG.debug("Request to delete prescription with physicianId: {}, patientId: {}", physicianId, patientId);
+=======
+            @PathParam("physicianId") int physicianId,
+            @PathParam("patientId") int patientId
+    ) {
+        LOG.debug("Request to delete prescription with physicianId: {}, patientId: {}", physicianId, patientId);
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
         try {
             boolean deleted = medicalService.deletePrescriptionById(physicianId, patientId);
             if (deleted) {
@@ -150,4 +188,8 @@ public class PrescriptionResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to delete prescription").build();
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1

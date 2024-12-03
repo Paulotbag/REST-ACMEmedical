@@ -37,6 +37,7 @@ import java.util.Set;
 import jakarta.ejb.Singleton;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -361,12 +362,49 @@ public class ACMEMedicalService implements Serializable {
         em.remove(certificate);
         return true;
     }
+<<<<<<< HEAD
     
     /**
      * Retrieve all patients from the database.
      *
      * @return List of all patients.
      */
+=======
+
+    ///////
+    public List<Medicine> getAllMedicines() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Medicine> cq = cb.createQuery(Medicine.class);
+        cq.select(cq.from(Medicine.class));
+        return em.createQuery(cq).getResultList();
+    }
+
+    public Medicine getMedicineById(int id) {
+        return em.find(Medicine.class, id);
+    }
+
+    @Transactional
+    public Medicine persistMedicine(Medicine newMedicine) {
+        em.persist(newMedicine);
+        return newMedicine;
+    }
+
+    @Transactional
+    public void deleteMedicineById(int id) {
+        Medicine medicine = getMedicineById(id);
+        if (medicine != null) {
+            em.refresh(medicine);
+            // Remove associated prescriptions first
+            Set<Prescription> prescriptions = medicine.getPrescriptions();
+            prescriptions.forEach(prescription -> {
+                em.remove(prescription);
+            });
+            em.remove(medicine);
+        }
+    }
+
+    ///////
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     public List<Patient> getAllPatients() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Patient> cq = cb.createQuery(Patient.class);
@@ -374,28 +412,35 @@ public class ACMEMedicalService implements Serializable {
         return em.createQuery(cq).getResultList();
     }
 
+<<<<<<< HEAD
     /**
      * Retrieve a patient by their ID.
      *
      * @param id ID of the patient to retrieve.
      * @return The patient if found, or null otherwise.
      */
+=======
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     public Patient getPatientById(int id) {
         return em.find(Patient.class, id);
     }
 
+<<<<<<< HEAD
     /**
      * Persist a new patient in the database.
      *
      * @param newPatient The patient to persist.
      * @return The persisted patient.
      */
+=======
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     @Transactional
     public Patient persistPatient(Patient newPatient) {
         em.persist(newPatient);
         return newPatient;
     }
 
+<<<<<<< HEAD
     /**
      * Update an existing patient in the database.
      *
@@ -458,11 +503,62 @@ public class ACMEMedicalService implements Serializable {
      * @param prescription The prescription to persist.
      * @return The persisted prescription.
      */
+=======
+    @Transactional
+    public void deletePatientById(int id) {
+        Patient patient = getPatientById(id);
+        if (patient != null) {
+            em.refresh(patient);
+
+            // Get all prescriptions for this patient
+            Set<Prescription> prescriptions = patient.getPrescriptions();
+
+            // For each prescription
+            prescriptions.forEach(prescription -> {
+                // If there's a medical certificate linked to the physician who wrote the prescription
+                Physician physician = prescription.getPhysician();
+                if (physician != null) {
+                    TypedQuery<MedicalCertificate> certQuery = em.createQuery(
+                            "SELECT mc FROM MedicalCertificate mc WHERE mc.physician.id = :physicianId",
+                            MedicalCertificate.class
+                    );
+                    certQuery.setParameter("physicianId", physician.getId());
+                    List<MedicalCertificate> certificates = certQuery.getResultList();
+
+                }
+
+                // Remove the prescription
+                em.remove(prescription);
+            });
+
+            // Finally remove the patient
+            em.remove(patient);
+        }
+    }
+
+    public List<Prescription> getAllPrescriptions() {
+        return em.createQuery("SELECT p FROM Prescription p", Prescription.class).getResultList();
+    }
+
+    public Prescription getPrescriptionById(int physicianId, int patientId) {
+        try {
+            return em.createQuery("SELECT p FROM Prescription p WHERE p.physicianId = :physicianId AND p.patientId = :patientId", Prescription.class)
+                    .setParameter("physicianId", physicianId)
+                    .setParameter("patientId", patientId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;  // Or handle as needed
+        }
+    }
+
+    @Transactional
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     public Prescription persistPrescription(Prescription prescription) {
         em.persist(prescription);
         return prescription;
     }
 
+<<<<<<< HEAD
     /**
      * Update an existing prescription in the database.
      *
@@ -479,10 +575,22 @@ public class ACMEMedicalService implements Serializable {
             existingPrescription.setPrescriptionInformation(updatedPrescription.getPrescriptionInformation());
             em.merge(existingPrescription);
             return existingPrescription;
+=======
+    @Transactional
+    public Prescription updatePrescription(int physicianId, int patientId, Prescription updatedPrescription) {
+        Prescription existing = getPrescriptionById(physicianId, patientId);
+        if (existing != null) {
+            existing.setMedicine(updatedPrescription.getMedicine());
+            existing.setNumberOfRefills(updatedPrescription.getNumberOfRefills());
+            existing.setPrescriptionInformation(updatedPrescription.getPrescriptionInformation());
+            em.merge(existing);
+            return existing;
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
         }
         return null;
     }
 
+<<<<<<< HEAD
     /**
      * Delete a prescription by its composite ID.
      *
@@ -490,6 +598,11 @@ public class ACMEMedicalService implements Serializable {
      * @param patientId Patient's ID.
      * @return True if the prescription was deleted, false otherwise.
      */
+=======
+
+
+    @Transactional
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
     public boolean deletePrescriptionById(int physicianId, int patientId) {
         Prescription prescription = getPrescriptionById(physicianId, patientId);
         if (prescription != null) {
@@ -498,6 +611,7 @@ public class ACMEMedicalService implements Serializable {
         }
         return false;
     }
+<<<<<<< HEAD
     
     /**
      * Retrieve all medicines from the database.
@@ -565,4 +679,6 @@ public class ACMEMedicalService implements Serializable {
         return false;
     }
 
+=======
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
 }

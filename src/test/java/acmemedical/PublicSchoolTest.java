@@ -27,4 +27,7 @@ class PublicSchoolTest {
         assertEquals("1", publicSchool.getClass().getAnnotation(DiscriminatorValue.class).value());
     }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1

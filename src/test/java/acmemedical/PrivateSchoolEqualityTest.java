@@ -23,4 +23,7 @@ class PrivateSchoolEqualityTest {
         assertEquals(privateSchool1, privateSchool2);
     }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1

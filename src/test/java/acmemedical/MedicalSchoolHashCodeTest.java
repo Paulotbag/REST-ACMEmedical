@@ -29,4 +29,8 @@ class MedicalSchoolHashCodeTest {
             super(isPublic);
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 1584fb15b7fd8c0cd178d421776bda56d7f3e7b1
