@@ -18,21 +18,23 @@ import java.util.Objects;
  */
 @MappedSuperclass  // PB01 - Defines this class as the superclass of all entities.
 @Access(AccessType.FIELD)  // PB02 - Instructs JPA to place all annotations on fields.
-@EntityListeners(PojoCompositeListener.class)  // PB03 - Registers listener class for entity lifecycle events.
+@EntityListeners(PojoListener.class)  // PB03 - Registers listener class for entity lifecycle events.
 public abstract class PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id  // PB04 - Identifies 'id' as the primary key.
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)  // PB04 - Configures automatic generation of IDs.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // PB04 - Configures automatic generation of IDs.
     protected int id;
 
     @Version  // PB05 - Specifies that 'version' is used for optimistic locking.
     protected int version;
 
-    @Column(updatable = false)  // PB06 - Marks 'created' as a non-updatable column in the database.
+    @Basic
+    @Column(name = "created", updatable = false)  // PB06 - Marks 'created' as a non-updatable column in the database.
     protected LocalDateTime created;
 
-    @Column  // PB07 - Specifies that 'updated' is a column in the database.
+    @Basic
+    @Column(name = "updated")  // PB07 - Specifies that 'updated' is a column in the database.
     protected LocalDateTime updated;
 
     public int getId() {
