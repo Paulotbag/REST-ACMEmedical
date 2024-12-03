@@ -87,6 +87,7 @@ public interface MyConstants {
     public static final String PROPERTY_KEY_SIZE = "Pbkdf2PasswordHash.KeySizeBytes";
     public static final String DEFAULT_KEY_SIZE = "32";
 
+
     //JPA constants
     public static final String PU_NAME = "acmemedical-PU";
     public static final String PARAM1 = "param1";

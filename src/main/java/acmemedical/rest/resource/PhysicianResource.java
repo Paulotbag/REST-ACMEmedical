@@ -11,6 +11,7 @@ import jakarta.security.enterprise.SecurityContext;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import static acmemedical.utility.MyConstants.*;
 import jakarta.ws.rs.core.Response.Status;
 
 import org.apache.logging.log4j.LogManager;
@@ -101,15 +102,7 @@ public class PhysicianResource {
         return Response.ok(createdPhysician).build();
     }
 
-    /**
-     * Updates the medicine associated with a physician-patient relationship.
-     * Only accessible by users with {@link #ADMIN_ROLE}.
-     * 
-     * @param physicianId The ID of the physician.
-     * @param patientId The ID of the patient.
-     * @param newMedicine The new medicine to associate.
-     * @return Response containing the updated medicine.
-     */
+
     @PUT
     @RolesAllowed({ADMIN_ROLE})
     @Path(PHYSICIAN_PATIENT_MEDICINE_RESOURCE_PATH)

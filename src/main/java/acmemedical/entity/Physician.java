@@ -16,11 +16,15 @@ import java.util.Set;
  * The persistent class for the physician database table.
  */
 @SuppressWarnings("unused")
+@NamedQuery(
+		name = Physician.ALL_PHYSICIANS_QUERY_NAME,
+		query = "SELECT p FROM Physician p"
+)
 
 @Entity(name="Physician")
 @Table(name="PHYSICIAN")
 public class Physician extends PojoBase implements Serializable {
-	public static final String ALL_PHYSICIANS_QUERY_NAME = null;
+	public static final String ALL_PHYSICIANS_QUERY_NAME = "Physician.findAll";
 	private static final long serialVersionUID = 1L;
 
     public Physician() {

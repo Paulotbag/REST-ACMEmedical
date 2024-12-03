@@ -6,31 +6,28 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import jakarta.persistence.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-@NamedQuery(
-        name = "SecurityUser.FIND_BY_PHYSICIAN_ID",
-        query = "SELECT su FROM SecurityUser su WHERE su.physician.id = :physicianId"
-)
-@NamedQuery(
-        name = "SecurityUser.userByName",
-        query = "SELECT u FROM SecurityUser u WHERE u.username = :param1"
-)
-// Annotate class as an entity
-@SuppressWarnings("unused")
-@Entity(name = "SecurityUser")
+
+@NamedQueries({
+        @NamedQuery(
+                name = "SecurityUser.FIND_BY_PHYSICIAN_ID",
+                query = "SELECT su FROM SecurityUser su WHERE su.physician.id = :physicianId"
+        ),
+        @NamedQuery(
+                name = "SecurityUser.userByName",
+                query = "SELECT su FROM SecurityUser su WHERE su.username = :param1"
+        )
+})
+@Entity
 @Table(name = "SECURITY_USER")
-@NamedQuery(
-        name = "SecurityUser.userByName",
-        query = "SELECT u FROM SecurityUser u WHERE u.username = :param1"
-)
-@JsonSerialize(using = SecurityUser.SecurityUserSerializer.class) // Custom serializer
+@JsonSerialize(using = SecurityUser.SecurityUserSerializer.class)
 public class SecurityUser implements Serializable, Principal {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -45,11 +42,11 @@ public class SecurityUser implements Serializable, Principal {
     @Column(name = "password_hash", nullable = false)
     protected String pwHash;
 
-    @OneToOne
-    @JoinColumn(name = "physician_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "physician_id", referencedColumnName = "id", nullable = true)
     protected Physician physician;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_has_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -57,12 +54,10 @@ public class SecurityUser implements Serializable, Principal {
     )
     protected Set<SecurityRole> roles = new HashSet<>();
 
-    // Default constructor
     public SecurityUser() {
         super();
     }
 
-    // Getters and setters
     public int getId() {
         return id;
     }
@@ -87,6 +82,14 @@ public class SecurityUser implements Serializable, Principal {
         this.pwHash = pwHash;
     }
 
+    public Physician getPhysician() {
+        return physician;
+    }
+
+    public void setPhysician(Physician physician) {
+        this.physician = physician;
+    }
+
     public Set<SecurityRole> getRoles() {
         return roles;
     }
@@ -99,14 +102,6 @@ public class SecurityUser implements Serializable, Principal {
         roles.add(role);
     }
 
-    public Physician getPhysician() {
-        return physician;
-    }
-
-    public void setPhysician(Physician physician) {
-        this.physician = physician;
-    }
-
     @Override
     public String getName() {
         return getUsername();
@@ -114,34 +109,22 @@ public class SecurityUser implements Serializable, Principal {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Objects.hash(getId());
-        return result;
+        return Objects.hash(id);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (obj instanceof SecurityUser otherSecurityUser) {
-            return Objects.equals(this.getId(), otherSecurityUser.getId());
-        }
-        return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        SecurityUser that = (SecurityUser) obj;
+        return id == that.id;
     }
 
     @Override
     public String toString() {
-        return "SecurityUser [id=" + id + ", username=" + username + "]";
+        return "SecurityUser{id=" + id + ", username='" + username + "'}";
     }
 
-    /**
-     * Custom JSON Serializer for SecurityUser class.
-     */
     public static class SecurityUserSerializer extends JsonSerializer<SecurityUser> {
         @Override
         public void serialize(SecurityUser user, JsonGenerator gen, SerializerProvider serializers) {
@@ -154,7 +137,7 @@ public class SecurityUser implements Serializable, Principal {
                 }
                 gen.writeArrayFieldStart("roles");
                 for (SecurityRole role : user.getRoles()) {
-                    gen.writeString(role.getRoleName()); // Assuming SecurityRole has a getRoleName() method.
+                    gen.writeString(role.getRoleName());
                 }
                 gen.writeEndArray();
                 gen.writeEndObject();

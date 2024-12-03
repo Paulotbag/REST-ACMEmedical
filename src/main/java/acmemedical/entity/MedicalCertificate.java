@@ -16,9 +16,10 @@ import java.io.Serializable;
  * The persistent class for the medical_certificate database table.
  */
 @NamedQuery(
-		name = "MedicalCertificate.ID_CARD_QUERY_NAME",
-		query = "SELECT mc FROM MedicalCertificate mc WHERE mc.id = :id"
+		name = "Physician.findWithCertificates",
+		query = "SELECT p FROM Physician p LEFT JOIN FETCH p.medicalCertificates WHERE p.id = :id"
 )
+
 @Entity(name = "MedicalCertificate")
 @Table(name = "MEDICAL_CERTIFICATE")
 @NamedQuery(
