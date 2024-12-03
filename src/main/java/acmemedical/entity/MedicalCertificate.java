@@ -2,7 +2,7 @@
  * File:  MedicalCertificate.java Course Materials CST 8277
  *
  * @author Teddy Yap
- * 
+ * Implemented: Paulo Granjeiro
  */
 package acmemedical.entity;
 
@@ -46,6 +46,9 @@ public class MedicalCertificate extends PojoBase implements Serializable {
 	@Column(name = "signed")
 	private byte signed;
 
+	/**
+	 * Default Constructor
+	 */
 	public MedicalCertificate() {
 		super();
 	}

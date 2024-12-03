@@ -58,10 +58,20 @@ public class Medicine extends PojoBase implements Serializable {
 	@JsonIgnore
 	private Set<Prescription> prescriptions = new HashSet<>();
 
+	/**
+	 * Default Constructor
+	 */
 	public Medicine() {
 		super();
 	}
 
+	/**
+	 * Constructor
+	 * @param drugName
+	 * @param manufacturerName
+	 * @param dosageInformation
+	 * @param prescriptions
+	 */
 	public Medicine(String drugName, String manufacturerName, String dosageInformation, Set<Prescription> prescriptions) {
 		this();
 		this.drugName = drugName;
@@ -70,77 +80,150 @@ public class Medicine extends PojoBase implements Serializable {
 		this.prescriptions = prescriptions;
 	}
 
+	/**
+	 *
+	 * @return String drugName
+	 */
 	public String getDrugName() {
 		return drugName;
 	}
 
+	/**
+	 *
+	 * @param drugName
+	 */
 	public void setDrugName(String drugName) {
 		this.drugName = drugName;
 	}
 
+	/**
+	 *
+	 * @return String manufacturerName
+	 */
 	public String getManufacturerName() {
 		return manufacturerName;
 	}
 
+	/**
+	 *
+	 * @param manufacturerName
+	 */
 	public void setManufacturerName(String manufacturerName) {
 		this.manufacturerName = manufacturerName;
 	}
 
+	/**
+	 *
+	 * @return String dosageInformation
+	 */
 	public String getDosageInformation() {
 		return dosageInformation;
 	}
 
+	/**
+	 *
+	 * @param dosageInformation
+	 */
 	public void setDosageInformation(String dosageInformation) {
 		this.dosageInformation = dosageInformation;
 	}
 
+	/**
+	 *
+	 * @return String chemicalName
+	 */
 	public String getChemicalName() {
 		return chemicalName;
 	}
 
+	/**
+	 *
+	 * @param chemicalName
+	 */
 	public void setChemicalName(String chemicalName) {
 		this.chemicalName = chemicalName;
 	}
 
+	/**
+	 *
+	 * @return String genericName
+	 */
 	public String getGenericName() {
 		return genericName;
 	}
 
+	/**
+	 *
+	 * @param genericName
+	 */
 	public void setGenericName(String genericName) {
 		this.genericName = genericName;
 	}
 
+	/**
+	 *
+	 * @return Set<Prescription> prescriptions
+	 */
 	public Set<Prescription> getPrescriptions() {
 		return prescriptions;
 	}
 
+	/**
+	 *
+	 * @param prescriptions
+	 */
 	public void setPrescriptions(Set<Prescription> prescriptions) {
 		this.prescriptions = prescriptions;
 	}
 
 	// Helper method to add a Prescription to the Medicine
+
+	/**
+	 *
+	 * @param prescription
+	 */
 	public void addPrescription(Prescription prescription) {
 		this.prescriptions.add(prescription);
 		prescription.setMedicine(this);
 	}
 
 	// Helper method to remove a Prescription from the Medicine
+
+	/**
+	 *
+	 * @param prescription
+	 */
 	public void removePrescription(Prescription prescription) {
 		this.prescriptions.remove(prescription);
 		prescription.setMedicine(null);
 	}
 
+	/**
+	 *
+	 * @param drugName
+	 * @param manufacturerName
+	 * @param dosageInformation
+	 */
 	public void setMedicine(String drugName, String manufacturerName, String dosageInformation) {
 		setDrugName(drugName);
 		setManufacturerName(manufacturerName);
 		setDosageInformation(dosageInformation);
 	}
 
+	/**
+	 *
+	 * @return int Objects.hash(getId(), drugName, manufacturerName)
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(getId(), drugName, manufacturerName);
 	}
 
+	/**
+	 *
+	 * @param obj
+	 * @return boolean
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -153,6 +236,10 @@ public class Medicine extends PojoBase implements Serializable {
 			   Objects.equals(manufacturerName, other.manufacturerName);
 	}
 
+	/**
+	 *
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		return "Medicine [id=" + getId() + ", drugName=" + drugName + ", manufacturerName=" + manufacturerName +
