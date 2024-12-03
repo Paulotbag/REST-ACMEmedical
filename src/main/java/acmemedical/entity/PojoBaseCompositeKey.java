@@ -27,10 +27,13 @@ public abstract class PojoBaseCompositeKey<ID extends Serializable> implements S
     @Version  // PC04 - Specifies that 'version' is used for optimistic locking.
     protected int version;
 
-    @Column(updatable = false)  // PC05 - Marks 'created' as a non-updatable column in the database.
+    // PC05 - Marks 'created' as a non-updatable column in the database.
+    @Basic
+    @Column(name = "created", updatable = false)
     protected LocalDateTime created;
 
-    @Column  // PC06 - Specifies that 'updated' is a column in the database.
+    @Basic
+    @Column(name = "updated")  // PC06 - Specifies that 'updated' is a column in the database.
     protected LocalDateTime updated;
 
     public abstract ID getId();

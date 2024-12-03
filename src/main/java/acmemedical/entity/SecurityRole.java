@@ -11,14 +11,16 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-@NamedQuery(
-        name = "SecurityRole.FIND_BY_NAME",
-        query = "SELECT sr FROM SecurityRole sr WHERE sr.roleName = :roleName"
-)
+
 @SuppressWarnings("unused")
 @Entity // SR01 - Defines this class as a JPA entity.
 @Table(name = "security_role") // Maps the entity to the "security_role" table in the database.
+@NamedQueries({
+        @NamedQuery(name = "SecurityRole.findAll", query = "SELECT sr FROM SecurityRole sr"),
+        @NamedQuery(name = "SecurityRole.findByName", query = "SELECT sr FROM SecurityRole sr WHERE sr.roleName = :roleName")
+})
 public class SecurityRole implements Serializable {
 
     /** Explicitly set serialVersionUID */
@@ -26,13 +28,15 @@ public class SecurityRole implements Serializable {
 
     @Id // SR02 - Marks this field as the primary key.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatically generates primary key values.
-    @Column(name = "id") // Maps to the "id" column in the database.
+    @Column(name = "role_id") // Maps to the "id" column in the database.
     protected int id;
 
-    @Column(name = "role_name", nullable = false, unique = true) // SR03 - Maps to the "role_name" column.
+    @Basic(optional = false)
+    @Column(name = "name", nullable = false) // SR03 - Maps to the "role_name" column.
     protected String roleName;
 
-    @ManyToMany(mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("roles")
+    @ManyToMany(mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     protected Set<SecurityUser> users = new HashSet<>();
 
     // Default constructor
