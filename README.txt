@@ -1,4 +1,4 @@
-Member              | Contributions                                                            | Average Peer Grade (Grade Provided by Group #1)
+Member              | Contributions                                                            | Average Peer Grade (Grade Provided by Group Abraham, Azadeh, Harpinder, Paulo)
 --------------------|-------------------------------------------------------------------------|------------------------------------------------
 Paulo Gomes         | Managed git repository, added JPA annotations to 4 entity classes       | 100%
                     | entity classes, finished Custom Authentication Mechanism, stablished    |
@@ -6,7 +6,7 @@ Paulo Gomes         | Managed git repository, added JPA annotations to 4 entity 
                     | Endpoint requests and project deployment, fixed ROLE access and JSON file for Postman. |
 Azadeh Sadeghtehrani | Wrote 20 JUnit tests, did the whole Building a REST API task, added JPA | 100%
                     | annotations to 4 entity classes.                                        |
-Abraham El Kachi    | Wrote 1 JUnit tests, Build the database (initially, we did not see the | 100%
+Abraham El Kachi    | Wrote 12 JUnit tests, Build the database (initially, we did not see the | 100%
                     | provided sql query), POPULATE TABLES USING SQL COMMANDS (initially,     |
                     | we did not see the provided sql query), added JPA annotations to 4      |
                     | entity classes, did some Securing REST Endpoints.                       |
