@@ -31,7 +31,7 @@ class MedicalSchoolTest {
 
     @Test
     void testIsPublic() {
-        //assertTrue(medicalSchool.isPublic());
+        assertTrue(medicalSchool.isPublic());
     }
 
     @Test

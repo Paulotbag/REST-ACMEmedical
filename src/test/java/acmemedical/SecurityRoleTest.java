@@ -15,6 +15,8 @@ class SecurityRoleTest {
 
     private SecurityRole role;
     private SecurityUser user;
+    private SecurityRole role1;
+    private SecurityRole role2;
 
     @BeforeEach
     void setUp() {
@@ -29,6 +31,9 @@ class SecurityRoleTest {
         Set<SecurityUser> users = new HashSet<>();
         users.add(user);
         role.setUsers(users);
+
+        role1 = new SecurityRole();
+        role2 = new SecurityRole();
     }
 
     @Test
@@ -70,6 +75,12 @@ class SecurityRoleTest {
     }
 
     @Test
+    void testSetAndGetId() {
+        role1.setId(1);
+        assertEquals(1, role1.getId());
+    }
+
+    @Test
     void testSetUsers() {
         Set<SecurityUser> newUsers = new HashSet<>();
         SecurityUser user1 = new SecurityUser();
@@ -87,5 +98,39 @@ class SecurityRoleTest {
         assertEquals(2, role.getUsers().size());
         assertTrue(role.getUsers().contains(user1));
         assertTrue(role.getUsers().contains(user2));
+    }
+
+    @Test
+    void testSetAndGetRoleName() {
+        role1.setRoleName("ADMIN");
+        assertEquals("ADMIN", role1.getRoleName());
+    }
+
+    @Test
+    void testEqualsSameId() {
+        role1.setId(1);
+        role2.setId(1);
+        assertTrue(role1.equals(role2));
+    }
+
+    @Test
+    void testEqualsDifferentId() {
+        role1.setId(1);
+        role2.setId(2);
+        assertFalse(role1.equals(role2));
+    }
+
+    @Test
+    void testHashCodeSameId() {
+        role1.setId(1);
+        role2.setId(1);
+        assertEquals(role1.hashCode(), role2.hashCode());
+    }
+
+    @Test
+    void testHashCodeDifferentId() {
+        role1.setId(1);
+        role2.setId(2);
+        assertNotEquals(role1.hashCode(), role2.hashCode());
     }
 }
