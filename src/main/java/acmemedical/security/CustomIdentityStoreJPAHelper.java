@@ -46,12 +46,26 @@ public class CustomIdentityStoreJPAHelper {
     public SecurityUser findUserByName(String username) {
         LOG.debug("find a SecurityUser by name = {}", username);
         SecurityUser user = null;
-        try {
-            TypedQuery<SecurityUser> query = em.createNamedQuery("SecurityUser.userByName", SecurityUser.class);
-            query.setParameter(PARAM1, username);
-            user = query.getSingleResult();
-        } catch (NoResultException e) {
-            LOG.debug("Named query didn't find any results for user = {}", username);
+        /*
+         *  
+         *  Call getSingleResult() inside a try-catch statement (NoResultException)
+         *  
+         *  Note:  Until this method is complete, the Basic Authentication for all HTTP
+         *         requests will fail, none of the REST'ful endpoints will work.
+         *  
+         */
+        try{
+            // Create a named query to find the user by username
+            TypedQuery<SecurityUser> findUserQuery = em.createNamedQuery("SecurityUser.userByName", SecurityUser.class);
+
+            // Set the parameter for the query
+            findUserQuery.setParameter(PARAM1, username);
+
+            // Execute the query and retrieve the single result
+            user = findUserQuery.getSingleResult();
+        } catch (NoResultException e){
+            System.out.println("An error occurred: " + e.getMessage());
+            user = null;
         }
         return user;
     }

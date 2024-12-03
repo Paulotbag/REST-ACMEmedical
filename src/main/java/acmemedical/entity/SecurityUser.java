@@ -1,8 +1,5 @@
 package acmemedical.entity;
 
-import acmemedical.rest.serializer.SecurityRoleSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -21,37 +18,40 @@ import java.util.Set;
 @SuppressWarnings("unused")
 @Entity(name = "SecurityUser")
 @Table(name = "SECURITY_USER")
-@NamedQuery(name = "SecurityUser.findAll", query = "SELECT su FROM SecurityUser su")
-@NamedQuery(name = "SecurityUser.findByPhysicianId", query = "SELECT su FROM SecurityUser su WHERE su.physician.id = :physicianId")
-@NamedQuery(name = "SecurityUser.userByName", query = "SELECT su FROM SecurityUser su WHERE su.username = :param1")
-//@JsonSerialize(using = SecurityUser.SecurityUserSerializer.class) // Custom serializer
+@NamedQuery(
+        name = "SecurityUser.userByName",
+        query = "SELECT u FROM SecurityUser u WHERE u.username = :param1"
+)
+@NamedQuery(
+        name = "SecurityUser.FIND_BY_PHYSICIAN_ID",
+        query = "SELECT su FROM SecurityUser su WHERE su.physician.id = :physicianId"
+)
+@JsonSerialize(using = SecurityUser.SecurityUserSerializer.class) // Custom serializer
 public class SecurityUser implements Serializable, Principal {
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "id")
     protected int id;
 
-    @Basic(optional = false)
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     protected String username;
 
-    @Basic(optional = false)
     @Column(name = "password_hash", nullable = false)
     protected String pwHash;
 
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "physician_id", referencedColumnName = "id")
-    @JsonManagedReference("physician-user")
     protected Physician physician;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(name = "user_has_role",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-    @JsonIgnoreProperties({"users", "password"})
+    @ManyToMany
+    @JoinTable(
+            name = "user_has_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     protected Set<SecurityRole> roles = new HashSet<>();
 
     // Default constructor
@@ -84,7 +84,6 @@ public class SecurityUser implements Serializable, Principal {
         this.pwHash = pwHash;
     }
 
-    @JsonSerialize(using = SecurityRoleSerializer.class)
     public Set<SecurityRole> getRoles() {
         return roles;
     }

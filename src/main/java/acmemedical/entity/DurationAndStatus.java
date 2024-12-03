@@ -10,8 +10,6 @@ package acmemedical.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -19,15 +17,12 @@ import jakarta.persistence.Embeddable;
 public class DurationAndStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Basic
 	@Column(name = "start_date", nullable = false)
 	private LocalDateTime startDate;
-
-	@Basic
+	
 	@Column(name = "end_date", nullable = true)
 	private LocalDateTime endDate;
 
-	@Basic
 	@Column(name = "active", nullable = false)
 	private byte active;
 

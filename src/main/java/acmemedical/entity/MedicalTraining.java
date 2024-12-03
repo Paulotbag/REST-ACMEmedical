@@ -10,8 +10,6 @@ package acmemedical.entity;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import static jakarta.persistence.FetchType.*;
@@ -20,9 +18,6 @@ import static jakarta.persistence.FetchType.*;
 
 @Entity(name = "MedicalTraining")
 @Table(name = "MEDICAL_TRAINING")
-@NamedQuery(name = "MedicalTraining.findAll", query = "SELECT mt FROM MedicalTraining mt")
-@NamedQuery(name = "MedicalTraining.findById", query = "SELECT mt FROM MedicalTraining mt WHERE mt.id = :id")
-@AttributeOverride(name = "id", column = @Column(name = "training_id"))
 public class MedicalTraining extends PojoBase implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -34,8 +29,7 @@ public class MedicalTraining extends PojoBase implements Serializable {
 	private MedicalSchool school;
 
 	// TODO MT04 - Add annotations for 1:1.  What should be the cascade and fetch types?
-	@JsonBackReference("certificate-training")
-	@OneToOne(mappedBy="medicalTraining", cascade = CascadeType.ALL, fetch = FetchType.LAZY) //field in the MedicalCertificate class. Maybe review the fetch type
+	@OneToOne(mappedBy="medicalTraining", cascade = CascadeType.ALL) //field in the MedicalCertificate class. Maybe review the fetch type
 	private MedicalCertificate certificate;
 
 	@Embedded

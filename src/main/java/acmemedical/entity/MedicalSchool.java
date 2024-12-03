@@ -12,11 +12,19 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 /**
  * The persistent class for the medical_school database table.
@@ -37,18 +45,12 @@ import jakarta.persistence.*;
 				query = "SELECT COUNT(ms) FROM MedicalSchool ms WHERE ms.name = :param1"
 		)
 })
-@DiscriminatorColumn(name = "public", discriminatorType = DiscriminatorType.INTEGER)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@JsonTypeInfo(
-		use = JsonTypeInfo.Id.NAME,
-		include = JsonTypeInfo.As.EXISTING_PROPERTY,
-		property = "isPublic"
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
-		@JsonSubTypes.Type(value = PublicSchool.class, name = "true"),
-		@JsonSubTypes.Type(value = PrivateSchool.class, name = "false")
+		@JsonSubTypes.Type(value = PublicSchool.class, name = "public"),
+		@JsonSubTypes.Type(value = PrivateSchool.class, name = "private")
 })
-@AttributeOverride(name = "id", column = @Column(name = "school_id"))
 public abstract class MedicalSchool extends PojoBase implements Serializable {
 
 	public static final String IS_DUPLICATE_QUERY_NAME = "MedicalSchool.IS_DUPLICATE_QUERY_NAME";
@@ -59,11 +61,10 @@ public abstract class MedicalSchool extends PojoBase implements Serializable {
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<MedicalTraining> medicalTrainings = new HashSet<>();
 
-	@Column(name = "public", insertable = false, updatable = false)
+	@Column(name = "is_public", nullable = false)
 	private boolean isPublic;
 
 	public MedicalSchool() {

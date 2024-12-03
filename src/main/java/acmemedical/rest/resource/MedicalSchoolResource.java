@@ -50,7 +50,6 @@ public class MedicalSchoolResource {
     protected SecurityContext sc;
     
     @GET
-    @RolesAllowed({ADMIN_ROLE})
     public Response getMedicalSchools() {
         LOG.debug("Retrieving all medical schools...");
         List<MedicalSchool> medicalSchools = service.getAllMedicalSchools();

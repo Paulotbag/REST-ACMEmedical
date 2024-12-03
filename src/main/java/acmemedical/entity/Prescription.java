@@ -2,8 +2,6 @@ package acmemedical.entity;
 
 import java.io.Serial;
 import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @SuppressWarnings("unused")
@@ -20,14 +18,13 @@ public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implement
 	private PrescriptionPK id;
 
 	@MapsId("physicianId")
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "physician_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference("physician-prescriptions")
 	private Physician physician;
 
 	@MapsId("patientId")
-	@ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
 	private Patient patient;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

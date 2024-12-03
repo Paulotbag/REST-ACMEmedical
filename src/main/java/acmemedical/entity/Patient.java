@@ -6,7 +6,6 @@
  */
 package acmemedical.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -20,18 +19,14 @@ import java.util.Set;
  */
 @Entity(name = "Patient")
 @Table(name = "PATIENT")
-@NamedQuery(name = "Patient.findAll", query = "SELECT p FROM Patient p")
-@AttributeOverride(name = "id", column = @Column(name = "patient_id"))
 public class Patient extends PojoBase implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 
-
-	@Basic(optional = false)
 	@Column(name="first_name")
 	private String firstName;
 
 
-	@Basic(optional = false)
 	@Column(name="last_name")
 	private String lastName;
 
@@ -56,7 +51,6 @@ public class Patient extends PojoBase implements Serializable {
 	private byte smoker;
 
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "patient", cascade= CascadeType.ALL, fetch = FetchType.LAZY) //
 	private Set<Prescription> prescriptions = new HashSet<>();
 

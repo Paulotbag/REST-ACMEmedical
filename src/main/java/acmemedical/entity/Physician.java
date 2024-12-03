@@ -6,9 +6,6 @@
  */
 package acmemedical.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -22,7 +19,6 @@ import java.util.Set;
 
 @Entity(name="Physician")
 @Table(name="PHYSICIAN")
-@NamedQuery(name = "Physician.findAll", query = "SELECT p FROM Physician p")
 public class Physician extends PojoBase implements Serializable {
 	public static final String ALL_PHYSICIANS_QUERY_NAME = null;
 	private static final long serialVersionUID = 1L;
@@ -32,27 +28,23 @@ public class Physician extends PojoBase implements Serializable {
     }
 
 
-	@Basic(optional = false)
-	@Column(name="first_name")
+	@Column(name="firstName")
 	private String firstName;
 
 
-	@Basic(optional = false)
-	@Column(name="last_name")
+	@Column(name="lastName")
 	private String lastName;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "physician", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) //Paulo: I changed mappedBy from "physician" to "owner"
+
+	@OneToMany(mappedBy = "owner", cascade= CascadeType.ALL, fetch = FetchType.LAZY) //Paulo: I changed mappedBy from "physician" to "owner"
 	private Set<MedicalCertificate> medicalCertificates = new HashSet<>();
 
 
-	@JsonManagedReference("physician-prescriptions")
 	@OneToMany(mappedBy = "physician", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Prescription> prescriptions = new HashSet<>();
 
 //	//  I don't think we need this. but... This is reverse relationship
-//	@JsonBackReference("physician-user")
-//	@OneToOne(mappedBy = "physician")
+//	@OneToOne(mappedBy = "physician") // mappedBy indicates that this is the inverse side of the relationship with Security User.
 //	private SecurityUser securityUser;
 
 	/**
