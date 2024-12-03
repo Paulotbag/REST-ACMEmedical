@@ -19,7 +19,7 @@ class PrivateSchoolTest {
 
     @Test
     void testIsPublic() {
-        //assertFalse(privateSchool.isPublic());
+        assertFalse(privateSchool.isPublic());
     }
 
     @Test
