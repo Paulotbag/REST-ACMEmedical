@@ -1,0 +1,93 @@
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running acmemedical.ConcreteMedicalSchoolEqualityTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.033 s - in acmemedical.ConcreteMedicalSchoolEqualityTest
+[INFO] Running acmemedical.DurationAndStatusHashCodeTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 s - in acmemedical.DurationAndStatusHashCodeTest
+[INFO] Running acmemedical.DurationAndStatusSetterTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s - in acmemedical.DurationAndStatusSetterTest
+[INFO] Running acmemedical.DurationAndStatusTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s - in acmemedical.DurationAndStatusTest
+[INFO] Running acmemedical.MedicalSchoolHashCodeTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 s - in acmemedical.MedicalSchoolHashCodeTest
+[INFO] Running acmemedical.MedicalSchoolPersistenceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s - in acmemedical.MedicalSchoolPersistenceTest
+[INFO] Running acmemedical.MedicalSchoolTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s - in acmemedical.MedicalSchoolTest
+[INFO] Running acmemedical.MedicalSchoolTypeTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s - in acmemedical.MedicalSchoolTypeTest
+[INFO] Running acmemedical.MedicineTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.02 s - in acmemedical.MedicineTest
+[INFO] Running acmemedical.PojoBaseCoreTest
+[ERROR] Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.011 s <<< FAILURE! - in acmemedical.PojoBaseCoreTest
+[ERROR] acmemedical.PojoBaseCoreTest.testEqualsAndHashCode  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <1978834756> but was: <947930246>
+	at acmemedical.PojoBaseCoreTest.testEqualsAndHashCode(PojoBaseCoreTest.java:57)
+
+[INFO] Running acmemedical.PojoBaseLifecycleTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 s - in acmemedical.PojoBaseLifecycleTest
+[INFO] Running acmemedical.PojoListenerPrePersistTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in acmemedical.PojoListenerPrePersistTest
+[INFO] Running acmemedical.PojoListenerPreUpdateTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in acmemedical.PojoListenerPreUpdateTest
+[INFO] Running acmemedical.PrescriptionPKTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s - in acmemedical.PrescriptionPKTest
+[INFO] Running acmemedical.PrescriptionRelationshipTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s - in acmemedical.PrescriptionRelationshipTest
+[INFO] Running acmemedical.PrescriptionTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s - in acmemedical.PrescriptionTest
+[INFO] Running acmemedical.PrivateSchoolEqualityTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in acmemedical.PrivateSchoolEqualityTest
+[INFO] Running acmemedical.PrivateSchoolTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 s - in acmemedical.PrivateSchoolTest
+[INFO] Running acmemedical.PublicSchoolEqualityTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s - in acmemedical.PublicSchoolEqualityTest
+[INFO] Running acmemedical.PublicSchoolHashCodeTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in acmemedical.PublicSchoolHashCodeTest
+[INFO] Running acmemedical.PublicSchoolTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s - in acmemedical.PublicSchoolTest
+[INFO] Running acmemedical.SecurityRoleTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s - in acmemedical.SecurityRoleTest
+[INFO] Running acmemedical.SecurityRoleUserRelationshipTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s - in acmemedical.SecurityRoleUserRelationshipTest
+[INFO] Running acmemedical.SecurityUserCoreTest
+[ERROR] Tests run: 5, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.003 s <<< FAILURE! - in acmemedical.SecurityUserCoreTest
+[ERROR] acmemedical.SecurityUserCoreTest.testSetAndGetRoles  Time elapsed: 0.002 s  <<< ERROR!
+java.lang.IllegalArgumentException: duplicate element: SecurityRole [id=0, roleName=ADMIN]
+	at acmemedical.SecurityUserCoreTest.testSetAndGetRoles(SecurityUserCoreTest.java:51)
+
+[INFO] Running acmemedical.SecurityUserSerializerTest
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.125 s <<< FAILURE! - in acmemedical.SecurityUserSerializerTest
+[ERROR] acmemedical.SecurityUserSerializerTest.testCustomSerialization  Time elapsed: 0.124 s  <<< ERROR!
+java.lang.IllegalArgumentException: duplicate element: SecurityRole [id=0, roleName=ADMIN]
+	at acmemedical.SecurityUserSerializerTest.setUp(SecurityUserSerializerTest.java:34)
+
+[INFO] Running acmemedical.SecurityUserTest
+[ERROR] Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.069 s <<< FAILURE! - in acmemedical.SecurityUserTest
+[ERROR] acmemedical.SecurityUserTest.testJsonSerialization  Time elapsed: 0.066 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+	at acmemedical.SecurityUserTest.testJsonSerialization(SecurityUserTest.java:87)
+
+[INFO] Running acmemedical.TestACMEMedicalSystem
+   acmemedical.TestACMEMedicalSystem | oneTimeSetUp[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.707 s <<< FAILURE! - in acmemedical.TestACMEMedicalSystem
+[ERROR] acmemedical.TestACMEMedicalSystem.test01_all_physicians_with_adminrole  Time elapsed: 0.31 s  <<< ERROR!
+jakarta.ws.rs.ProcessingException: java.net.ConnectException: Connection refused: connect
+	at acmemedical.TestACMEMedicalSystem.test01_all_physicians_with_adminrole(TestACMEMedicalSystem.java:93)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at acmemedical.TestACMEMedicalSystem.test01_all_physicians_with_adminrole(TestACMEMedicalSystem.java:93)
+
+[INFO]
+[INFO] Results:
+[INFO]
+[ERROR] Failures:
+[ERROR]   PojoBaseCoreTest.testEqualsAndHashCode:57 expected: <1978834756> but was: <947930246>
+[ERROR]   SecurityUserTest.testJsonSerialization:87 expected: <true> but was: <false>
+[ERROR] Errors:
+[ERROR]   SecurityUserCoreTest.testSetAndGetRoles:51 » IllegalArgument duplicate element...
+[ERROR]   SecurityUserSerializerTest.setUp:34 » IllegalArgument duplicate element: Secur...
+[ERROR]   TestACMEMedicalSystem.test01_all_physicians_with_adminrole:93 » Processing jav...
+[INFO]
+[ERROR] Tests run: 91, Failures: 2, Errors: 3, Skipped: 0
+[INFO]
+[ERROR] There are test failures.
