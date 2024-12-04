@@ -67,35 +67,67 @@ public abstract class MedicalSchool extends PojoBase implements Serializable {
 	@Column(name = "is_public", nullable = false)
 	private boolean isPublic;
 
+	/**
+	 * Default constructor
+	 */
 	public MedicalSchool() {
 		super();
 	}
 
+	/**
+	 *
+	 * @param isPublic
+	 */
 	public MedicalSchool(boolean isPublic) {
 		this();
 		this.isPublic = isPublic;
 	}
 
+
+	/**
+	 *
+	 * @return boolean isPublic
+	 */
 	public boolean isPublic() {
 		return isPublic;
 	}
 
+	/**
+	 *
+	 * @return Set<MedicalTraining> medicalTrainings
+	 */
 	public Set<MedicalTraining> getMedicalTrainings() {
 		return medicalTrainings;
 	}
 
+	/**
+	 *
+	 * @param medicalTrainings
+	 */
 	public void setMedicalTrainings(Set<MedicalTraining> medicalTrainings) {
 		this.medicalTrainings = medicalTrainings;
 	}
 
+	/**
+	 *
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 *
+	 * @return String name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 *
+	 * @return int prime * result + Objects.hash(getId(), getName())
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,6 +135,11 @@ public abstract class MedicalSchool extends PojoBase implements Serializable {
 		return prime * result + Objects.hash(getId(), getName());
 	}
 
+	/**
+	 *
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

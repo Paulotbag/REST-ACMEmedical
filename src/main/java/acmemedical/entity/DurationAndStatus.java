@@ -26,25 +26,50 @@ public class DurationAndStatus implements Serializable {
 	@Column(name = "active", nullable = false)
 	private byte active;
 
+	/**
+	 * Defaul Constructor
+	 */
 	public DurationAndStatus() {
 	}
 
+	/**
+	 *
+	 * @return LocalDateTime
+	 */
 	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
+	/**
+	 *
+	 * @param startDate
+	 */
 	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
 
+	/**
+	 *
+	 * @return LocalDateTime
+	 */
 	public LocalDateTime getEndDate() {
 		return endDate;
 	}
 
+	/**
+	 *
+	 * @param endDate
+	 */
 	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 
+	/**
+	 *
+	 * @param startDate
+	 * @param endDate
+	 * @param active
+	 */
 	public void setDurationAndStatus(LocalDateTime startDate, LocalDateTime endDate, String active) {
 		setStartDate(startDate);
 		setEndDate(endDate);
@@ -53,10 +78,18 @@ public class DurationAndStatus implements Serializable {
 		setActive(("+".equals(active) ? p : n));
 	}
 
+	/**
+	 *
+	 * @return byte
+	 */
 	public byte getActive() {
 		return active;
 	}
 
+	/**
+	 *
+	 * @param active
+	 */
 	public void setActive(byte active) {
 		this.active = active;
 	}
@@ -75,6 +108,11 @@ public class DurationAndStatus implements Serializable {
 		return prime * result + Objects.hash(getStartDate(), getEndDate(), getActive());
 	}
 
+	/**
+	 *
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

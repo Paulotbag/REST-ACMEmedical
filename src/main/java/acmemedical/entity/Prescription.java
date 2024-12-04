@@ -37,33 +37,58 @@ public class Prescription extends PojoBaseCompositeKey<PrescriptionPK> implement
 	@Column(length = 100, name = "prescription_information")
 	private String prescriptionInformation;
 
+
 	public Prescription() {
 		id = new PrescriptionPK();
 	}
 
+	/**
+	 *
+	 * @return PrescriptionPK id
+	 */
 	@Override
 	public PrescriptionPK getId() {
 		return id;
 	}
 
+	/**
+	 *
+	 * @param id
+	 */
 	@Override
 	public void setId(PrescriptionPK id) {
 		this.id = id;
 	}
 
+	/**
+	 *
+	 * @return Physician  - physician
+	 */
 	public Physician getPhysician() {
 		return physician;
 	}
 
+	/**
+	 *
+	 * @param physician
+	 */
 	public void setPhysician(Physician physician) {
 		id.setPhysicianId(physician.getId());
 		this.physician = physician;
 	}
 
+	/**
+	 *
+	 * @return Patient patient
+	 */
 	public Patient getPatient() {
 		return patient;
 	}
 
+	/**
+	 *
+	 * @param patient
+	 */
 	public void setPatient(Patient patient) {
 		id.setPatientId(patient.getId());
 		this.patient = patient;

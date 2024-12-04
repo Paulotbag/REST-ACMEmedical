@@ -3,8 +3,12 @@
  *
  * @author Teddy Yap 
  * @author Shariar (Shawn) Emami
- * @implemented Azadeh Sadeghtehrani
- * 
+ * @implemented Azadeh Sadeghtehrani, Paulo Granjeiro
+ *
+ * NOTES: This class, MedicalSchoolResource, is a RESTful resource for managing Medical School,
+ * including retrieving, adding, and deleting Medical School data,
+ * with role-based access control (admin and user roles) enforced via annotations.
+ * It integrates with a service layer for business logic and handles security and exception scenarios.
  */
 package acmemedical.rest.resource;
 

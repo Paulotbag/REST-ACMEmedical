@@ -1,3 +1,14 @@
+/**
+ * @AUTHOR: PAULO GRANJEIRO, Azadeh Sadeghtehrani, Abraham El Kachi, Harpinder Brar
+ * DATE: 2024-12-03
+ * Objected Oriented Programming
+ *
+ * NOTES: This class, PhysicianResource, is a RESTful resource for managing physicians,
+ * including retrieving, adding, updating, and deleting physician data,
+ * with role-based access control (admin and user roles) enforced via annotations.
+ * It integrates with a service layer for business logic and handles security and exception scenarios.
+ */
+
 package acmemedical.rest.resource;
 
 import static acmemedical.utility.MyConstants.*;

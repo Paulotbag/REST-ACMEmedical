@@ -40,6 +40,11 @@ public class Physician extends PojoBase implements Serializable {
 	private Set<MedicalCertificate> medicalCertificates = new HashSet<>();
 
 
+<<<<<<< HEAD
+=======
+
+	@JsonManagedReference("physician-prescriptions")
+>>>>>>> a43ce57bd2cfcddd5fbb3cf444905beb744cc71e
 	@OneToMany(mappedBy = "physician", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Prescription> prescriptions = new HashSet<>();
 

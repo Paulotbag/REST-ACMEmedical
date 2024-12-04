@@ -35,12 +35,17 @@ public class SecurityRole implements Serializable {
     @ManyToMany(mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
     protected Set<SecurityUser> users = new HashSet<>();
 
-    // Default constructor
+    /**
+     *     Default constructor
+     */
     public SecurityRole() {
         super();
     }
 
-    // Getters and setters
+    /**
+     *
+     * @return int id
+     */
     public int getId() {
         return id;
     }

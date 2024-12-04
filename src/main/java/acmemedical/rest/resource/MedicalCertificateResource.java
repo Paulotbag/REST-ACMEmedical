@@ -1,3 +1,14 @@
+/**
+ * @AUTHOR: PAULO GRANJEIRO, Azadeh Sadeghtehrani, Abraham El Kachi, Harpinder Brar
+ * DATE: 2024-12-03
+ * Objected Oriented Programming
+ *
+ * NOTES: This class, MedicalCertificateResource, is a RESTful resource for managing Medical Certificates,
+ * including retrieving, adding, updating, and deleting Medical Certificates data,
+ * with role-based access control (admin and user roles) enforced via annotations.
+ * It integrates with a service layer for business logic and handles security and exception scenarios.
+ */
+
 package acmemedical.rest.resource;
 
 import jakarta.annotation.security.RolesAllowed;

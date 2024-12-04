@@ -28,13 +28,21 @@ public class MedicalTraining extends PojoBase implements Serializable {
 	@JoinColumn(name = "school_id") //I used the foreign key column name from medical_certificate table.
 	private MedicalSchool school;
 
+<<<<<<< HEAD
 	// TODO MT04 - Add annotations for 1:1.  What should be the cascade and fetch types?
 	@OneToOne(mappedBy="medicalTraining", cascade = CascadeType.ALL) //field in the MedicalCertificate class. Maybe review the fetch type
+=======
+	@JsonBackReference("certificate-training")
+	@OneToOne(mappedBy="medicalTraining", cascade = CascadeType.ALL, fetch = FetchType.LAZY) //field in the MedicalCertificate class. Maybe review the fetch type
+>>>>>>> a43ce57bd2cfcddd5fbb3cf444905beb744cc71e
 	private MedicalCertificate certificate;
 
 	@Embedded
 	private DurationAndStatus durationAndStatus;
 
+	/**
+	 * Default Constructor
+	 */
 	public MedicalTraining() {
 		durationAndStatus = new DurationAndStatus();
 	}
